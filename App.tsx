@@ -5,8 +5,8 @@ import {
     ESSAY_2_TITLE, ESSAY_2_CONTENT, ESSAY_2_PRE_DATA
 } from './constants';
 import { Essay, PracticeMode, Token, UserAnswers, VerificationResult } from './types';
-import { analyzeTextForMemorization, analyzeTextForTranslation, generateSpeech } from './services/geminiService';
-import { decodeAudioData, playAudioBuffer, getAudioContext, stopAudio } from './services/audioService';
+import { analyzeTextForMemorization, analyzeTextForTranslation } from './services/geminiService';
+import { playText, stopAudio } from './services/audioService';
 
 // --- Icons ---
 const PlayIcon = () => (
@@ -19,7 +19,7 @@ const PlusIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
 );
 const TrashIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
 );
 const CheckIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -63,8 +63,6 @@ export default function App() {
 
   // State for Audio
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
-  const shouldPlayRef = useRef(false);
 
   // Initialization
   useEffect(() => {
@@ -119,7 +117,6 @@ export default function App() {
     setScore(null);
     
     // Stop audio
-    shouldPlayRef.current = false;
     stopAudio();
     setIsPlaying(false);
     
@@ -176,59 +173,17 @@ export default function App() {
       setIsMobileMenuOpen(false);
   }
 
-  const handlePlayAudio = async () => {
+  const handlePlayAudio = () => {
     if (!activeEssay) return;
     
-    // Toggle off
     if (isPlaying) {
-        shouldPlayRef.current = false;
         stopAudio();
-        return;
-    }
-
-    shouldPlayRef.current = true;
-    setIsLoadingAudio(true);
-    
-    try {
-        let base64 = activeEssay.audioBase64;
-
-        // If not cached, generate it
-        if (!base64) {
-            base64 = await generateSpeech(activeEssay.rawContent);
-            
-            // Check if user cancelled
-            if (!shouldPlayRef.current) {
-                setIsLoadingAudio(false);
-                return;
-            }
-
-            // Cache it
-            setEssays(prev => prev.map(e => 
-                e.id === activeEssay.id ? { ...e, audioBase64: base64 } : e
-            ));
-        }
-        
-        const ctx = getAudioContext();
-        const buffer = await decodeAudioData(base64!, ctx);
-
-        if (!shouldPlayRef.current) {
-            setIsLoadingAudio(false);
-            return;
-        }
-
-        setIsLoadingAudio(false);
-        setIsPlaying(true);
-        await playAudioBuffer(buffer);
         setIsPlaying(false);
-        shouldPlayRef.current = false;
-    } catch (err) {
-        console.error(err);
-        if (shouldPlayRef.current) {
-            alert("Audio generation failed. Please check your API key.");
-            setIsLoadingAudio(false);
+    } else {
+        setIsPlaying(true);
+        playText(activeEssay.rawContent, () => {
             setIsPlaying(false);
-            shouldPlayRef.current = false;
-        }
+        });
     }
   };
 
@@ -598,11 +553,10 @@ export default function App() {
                     {/* Audio Control (Only show in Read/Blank modes, usually not needed in Translation input mode, but good to have) */}
                     <button 
                         onClick={handlePlayAudio}
-                        disabled={isLoadingAudio}
                         className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 transition-colors"
-                        title="Read Aloud (Gemini TTS)"
+                        title="Read Aloud (TTS)"
                     >
-                        {isLoadingAudio ? <LoadingSpinner /> : isPlaying ? <PauseIcon /> : <PlayIcon />}
+                        {isPlaying ? <PauseIcon /> : <PlayIcon />}
                     </button>
 
                     <div className="w-px h-6 bg-gray-300"></div>

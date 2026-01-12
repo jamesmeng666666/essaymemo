@@ -1,85 +1,115 @@
-// Utility to handle Gemini raw PCM audio decoding
 
-let audioContext: AudioContext | null = null;
-let currentSource: AudioBufferSourceNode | null = null;
+// Utility to handle Text-to-Speech using native Web Speech API
+// This works offline and in regions where Google APIs are blocked (e.g. China).
 
-export const getAudioContext = (): AudioContext => {
-  if (!audioContext) {
-    audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({
-      sampleRate: 24000, // Gemini TTS standard sample rate
-    });
-  }
-  return audioContext;
+let synth: SpeechSynthesis | null = null;
+if (typeof window !== "undefined") {
+  synth = window.speechSynthesis;
+}
+
+let queue: string[] = [];
+let onCompleteGlobal: (() => void) | null = null;
+let isInternalPlaying = false;
+
+// Helper to get the best available English voice
+const getEnglishVoice = (): SpeechSynthesisVoice | null => {
+  if (!synth) return null;
+  const voices = synth.getVoices();
+  
+  // Priority list for "Human-like" voices
+  return (
+    voices.find((v) => v.name === "Google US English") ||
+    voices.find((v) => v.name.includes("Samantha")) || // iOS/macOS High quality
+    voices.find((v) => v.name.includes("Daniel")) ||   // iOS/macOS High quality
+    voices.find((v) => v.name.includes("Microsoft Zira")) || // Windows
+    voices.find((v) => v.lang === "en-US") ||
+    voices.find((v) => v.lang.startsWith("en")) ||
+    null
+  );
 };
 
-function atob_safe(base64: string) {
-  const binaryString = window.atob(base64);
-  const len = binaryString.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-  return bytes;
-}
+// Split text into meaningful chunks (sentences) to prevent browser TTS from cutting off long text
+const chunkText = (text: string): string[] => {
+  // Regex: Split by [.!?] followed by whitespace or EOF, but keep the delimiter.
+  // This is a basic sentence splitter.
+  const rawSentences = text.match(/[^.!?\n]+[.!?\n]*/g) || [text];
+  return rawSentences.map(s => s.trim()).filter(s => s.length > 0);
+};
 
-export async function decodeAudioData(
-  base64String: string,
-  ctx: AudioContext
-): Promise<AudioBuffer> {
-  const bytes = atob_safe(base64String);
-  // Gemini sends raw PCM (Int16), not a WAV file.
-  // We need to convert Int16 -> Float32 manually for AudioBuffer
-  const dataInt16 = new Int16Array(bytes.buffer);
-  const numChannels = 1; // Usually mono
-  const sampleRate = 24000;
-  
-  const frameCount = dataInt16.length / numChannels;
-  const buffer = ctx.createBuffer(numChannels, frameCount, sampleRate);
-
-  for (let channel = 0; channel < numChannels; channel++) {
-    const channelData = buffer.getChannelData(channel);
-    for (let i = 0; i < frameCount; i++) {
-      // Normalize Int16 to Float32 [-1.0, 1.0]
-      channelData[i] = dataInt16[i * numChannels + channel] / 32768.0;
+const speakNext = () => {
+    if (!synth || queue.length === 0) {
+        isInternalPlaying = false;
+        if (onCompleteGlobal) onCompleteGlobal();
+        return;
     }
-  }
-  return buffer;
-}
 
-export function stopAudio() {
-    if (currentSource) {
-        try {
-            currentSource.stop();
-        } catch (e) {
-            // Ignore errors if already stopped
-        }
-        currentSource = null;
-    }
-}
-
-export async function playAudioBuffer(buffer: AudioBuffer): Promise<void> {
-  const ctx = getAudioContext();
-  // Resume context if suspended (browser autoplay policy)
-  if (ctx.state === 'suspended') {
-    await ctx.resume();
-  }
-
-  // Stop any currently playing audio before starting new one
-  stopAudio();
-
-  return new Promise((resolve) => {
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
-    source.connect(ctx.destination);
+    const text = queue.shift()!;
+    const utterance = new SpeechSynthesisUtterance(text);
     
-    currentSource = source;
+    const voice = getEnglishVoice();
+    if (voice) {
+        utterance.voice = voice;
+    }
+    
+    // Adjust for natural reading speed
+    utterance.rate = 0.9; 
+    utterance.pitch = 1.0;
 
-    source.onended = () => {
-        if (currentSource === source) {
-            currentSource = null;
-        }
-        resolve();
+    utterance.onend = () => {
+        // Recursively play next chunk
+        speakNext();
     };
-    source.start();
-  });
-}
+
+    utterance.onerror = (e) => {
+        console.error("TTS Error:", e);
+        // Continue to next chunk even if one fails
+        speakNext();
+    };
+
+    synth.speak(utterance);
+};
+
+export const playText = (text: string, onComplete?: () => void) => {
+    if (!synth) {
+        console.warn("Speech Synthesis not supported in this browser.");
+        if (onComplete) onComplete();
+        return;
+    }
+
+    // Stop any current playback
+    stopAudio();
+
+    queue = chunkText(text);
+    onCompleteGlobal = onComplete || null;
+    isInternalPlaying = true;
+
+    // Chrome specific: voices might load asynchronously
+    if (synth.getVoices().length === 0) {
+        const tempHandler = () => {
+            synth!.onvoiceschanged = null;
+            if (isInternalPlaying) speakNext();
+        };
+        synth.onvoiceschanged = tempHandler;
+        // Fallback: try speaking anyway after short delay if event doesn't fire
+        setTimeout(() => {
+            if (isInternalPlaying && synth!.speaking === false) speakNext();
+        }, 100);
+    } else {
+        speakNext();
+    }
+};
+
+export const stopAudio = () => {
+    isInternalPlaying = false;
+    queue = [];
+    if (synth) {
+        synth.cancel();
+    }
+    // We do NOT call onCompleteGlobal here to avoid loops or side effects during manual stop
+    onCompleteGlobal = null;
+};
+
+// For backward compatibility / safety
+export const getAudioContext = () => null; 
+export const decodeAudioData = async () => ({} as AudioBuffer);
+export const playAudioBuffer = async () => {};

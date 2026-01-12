@@ -1,3 +1,4 @@
+
 export type PartOfSpeech = 'noun' | 'verb' | 'adj' | 'adv' | 'other';
 
 export interface Token {
@@ -20,7 +21,6 @@ export interface Essay {
   tokens: Token[];
   sentences?: Sentence[]; 
   isAnalyzed: boolean;
-  audioBase64?: string; // Cache for the generated speech
   createdAt: number;
 }
 
