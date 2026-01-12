@@ -1,0 +1,5 @@
+{
+  "name": "MemoMaster AI",
+  "description": "An intelligent English essay memorization assistant using Gemini for grammatical analysis and human-like text-to-speech.",
+  "requestFramePermissions": []
+}
