@@ -319,7 +319,8 @@ export default function App() {
     if (token.text.includes('\n')) return null;
 
     if (token.isSeparator) {
-        return <span key={token.id} className="whitespace-pre text-gray-800">{token.text}</span>;
+        // whitespace-pre-wrap allows spaces to wrap if they are at the end of a line
+        return <span key={token.id} className="whitespace-pre-wrap text-gray-800">{token.text}</span>;
     }
 
     const hidden = isTokenHidden(token);
@@ -345,7 +346,7 @@ export default function App() {
                     type="text"
                     value={answers[token.id] || ''}
                     onChange={(e) => handleInputChange(token.id, e.target.value)}
-                    className={`border-b-2 outline-none text-center bg-transparent transition-colors px-0.5 mx-0.5 ${borderClass} ${textClass}`}
+                    className={`border-b-2 outline-none text-center bg-transparent transition-colors px-0.5 mx-0.5 rounded-none appearance-none ${borderClass} ${textClass}`}
                     style={{ width }}
                     autoComplete="off"
                     autoCorrect="off"
@@ -388,9 +389,9 @@ export default function App() {
     if (currentParagraph.length > 0) paragraphs.push(currentParagraph);
 
     return (
-        <div className="space-y-6 font-serif leading-relaxed text-lg">
+        <div className="space-y-6 font-serif leading-relaxed text-base md:text-lg">
             {paragraphs.map((para, idx) => (
-                <p key={idx} className="indent-8 text-left">
+                <p key={idx} className="indent-6 md:indent-8 text-left">
                     {para.map(token => renderToken(token))}
                 </p>
             ))}
@@ -566,8 +567,8 @@ export default function App() {
         )}
 
         {/* Text Area */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-8 bg-gray-50">
-            <div className={`max-w-3xl mx-auto min-h-[50vh] ${mode !== PracticeMode.TRANSLATION ? 'bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-10 text-gray-800' : ''}`}>
+        <div className="flex-1 overflow-y-auto p-2 sm:p-8 bg-gray-50">
+            <div className={`max-w-3xl mx-auto min-h-[50vh] ${mode !== PracticeMode.TRANSLATION ? 'bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-10 text-gray-800' : ''}`}>
                 {activeEssay ? (
                     !activeEssay.isAnalyzed ? (
                         <div className="flex flex-col items-center justify-center h-40 text-gray-400">
