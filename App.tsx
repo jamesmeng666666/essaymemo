@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid'; // Simple ID generator logic can be replaced if library not available, but assuming environment supports basic JS.
-import { ESSAY_1_TITLE, ESSAY_1_CONTENT, ESSAY_2_TITLE, ESSAY_2_CONTENT } from './constants';
+import { 
+    ESSAY_1_TITLE, ESSAY_1_CONTENT, ESSAY_1_PRE_DATA,
+    ESSAY_2_TITLE, ESSAY_2_CONTENT, ESSAY_2_PRE_DATA
+} from './constants';
 import { Essay, PracticeMode, Token, UserAnswers, VerificationResult } from './types';
 import { analyzeTextForMemorization, analyzeTextForTranslation, generateSpeech } from './services/geminiService';
 import { decodeAudioData, playAudioBuffer, getAudioContext, stopAudio } from './services/audioService';
@@ -75,13 +78,14 @@ export default function App() {
       const id1 = generateId();
       const id2 = generateId(); // Ensure unique IDs
 
+      // Hydrate pre-analyzed data with IDs
       const essay1: Essay = {
         id: id1,
         title: ESSAY_1_TITLE,
         rawContent: ESSAY_1_CONTENT,
-        tokens: [],
-        sentences: [],
-        isAnalyzed: false,
+        tokens: ESSAY_1_PRE_DATA.tokens.map((t, i) => ({ ...t, id: `def1-tok-${i}` })),
+        sentences: ESSAY_1_PRE_DATA.sentences.map((s, i) => ({ ...s, id: `def1-sent-${i}` })),
+        isAnalyzed: true,
         createdAt: Date.now()
       };
 
@@ -89,18 +93,14 @@ export default function App() {
         id: id2,
         title: ESSAY_2_TITLE,
         rawContent: ESSAY_2_CONTENT,
-        tokens: [],
-        sentences: [],
-        isAnalyzed: false,
+        tokens: ESSAY_2_PRE_DATA.tokens.map((t, i) => ({ ...t, id: `def2-tok-${i}` })),
+        sentences: ESSAY_2_PRE_DATA.sentences.map((s, i) => ({ ...s, id: `def2-sent-${i}` })),
+        isAnalyzed: true, 
         createdAt: Date.now() + 1
       };
 
       setEssays([essay1, essay2]);
       setActiveEssayId(id1);
-      
-      // Analyze both initially
-      analyzeEssay(essay1);
-      setTimeout(() => analyzeEssay(essay2), 100); // Slight delay to prevent race conditions on very fast mounting/state updates
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -126,24 +126,6 @@ export default function App() {
   }, [mode, activeEssayId]);
 
   const activeEssay = essays.find(e => e.id === activeEssayId);
-
-  const analyzeEssay = async (essay: Essay) => {
-    // If already analyzed, skip
-    if (essay.isAnalyzed) return;
-
-    try {
-      // Parallel execution for grammar tokens and sentence translation
-      const [tokens, sentences] = await Promise.all([
-          analyzeTextForMemorization(essay.rawContent),
-          analyzeTextForTranslation(essay.rawContent)
-      ]);
-
-      setEssays(prev => prev.map(e => e.id === essay.id ? { ...e, tokens, sentences, isAnalyzed: true } : e));
-    } catch (err) {
-      console.error("Analysis failed for essay:", essay.title, err);
-      // We don't alert here for background initialization to avoid spamming alerts
-    }
-  };
 
   const handleAddEssay = async () => {
     if (!newTitle.trim() || !newContent.trim()) return;
@@ -201,7 +183,6 @@ export default function App() {
     if (isPlaying) {
         shouldPlayRef.current = false;
         stopAudio();
-        // setIsPlaying(false) happens automatically via playAudioBuffer promise resolution when stopped
         return;
     }
 
@@ -230,7 +211,6 @@ export default function App() {
         const ctx = getAudioContext();
         const buffer = await decodeAudioData(base64!, ctx);
 
-        // Check again
         if (!shouldPlayRef.current) {
             setIsLoadingAudio(false);
             return;
@@ -244,7 +224,7 @@ export default function App() {
     } catch (err) {
         console.error(err);
         if (shouldPlayRef.current) {
-            alert("Audio generation failed.");
+            alert("Audio generation failed. Please check your API key.");
             setIsLoadingAudio(false);
             setIsPlaying(false);
             shouldPlayRef.current = false;
@@ -335,12 +315,11 @@ export default function App() {
   // --- Render Helpers ---
 
   const renderToken = (token: Token) => {
+    // If it's a newline, we handle it in the paragraph grouping logic, but if it slips through or is inside a paragraph for some reason:
+    if (token.text.includes('\n')) return null;
+
     if (token.isSeparator) {
-        // Replace newlines with <br/>
-        if (token.text.includes('\n')) {
-             return <br key={token.id} />;
-        }
-        return <span key={token.id} className="whitespace-pre">{token.text}</span>;
+        return <span key={token.id} className="whitespace-pre text-gray-800">{token.text}</span>;
     }
 
     const hidden = isTokenHidden(token);
@@ -358,22 +337,22 @@ export default function App() {
         }
 
         // Calculate width approx based on char length, min 30px
-        const width = Math.max(30, token.text.length * 10) + "px";
+        const width = Math.max(30, token.text.length * 11) + "px";
 
         return (
-            <span key={token.id} className="inline-block mx-1 relative group">
+            <span key={token.id} className="inline-block relative group align-baseline">
                 <input
                     type="text"
                     value={answers[token.id] || ''}
                     onChange={(e) => handleInputChange(token.id, e.target.value)}
-                    className={`border-b-2 outline-none text-center bg-transparent transition-colors px-1 ${borderClass} ${textClass}`}
+                    className={`border-b-2 outline-none text-center bg-transparent transition-colors px-0.5 mx-0.5 ${borderClass} ${textClass}`}
                     style={{ width }}
                     autoComplete="off"
                     autoCorrect="off"
                     autoCapitalize="off"
                 />
                 {isChecked && !isCorrect && (
-                     <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                     <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                         {token.text}
                      </span>
                 )}
@@ -382,6 +361,41 @@ export default function App() {
     }
 
     return <span key={token.id} className="text-gray-800">{token.text}</span>;
+  };
+
+  const renderEssayContent = () => {
+    if (!activeEssay) return null;
+
+    // Group tokens into paragraphs based on newline characters
+    const paragraphs: Token[][] = [];
+    let currentParagraph: Token[] = [];
+    
+    // Safety check for tokens
+    const tokens = activeEssay.tokens || [];
+
+    tokens.forEach(token => {
+        if (token.text.includes('\n')) {
+            if (currentParagraph.length > 0) {
+                paragraphs.push(currentParagraph);
+                currentParagraph = [];
+            }
+            // Ignore the newline token itself for rendering
+        } else {
+            currentParagraph.push(token);
+        }
+    });
+    // Push the last paragraph if exists
+    if (currentParagraph.length > 0) paragraphs.push(currentParagraph);
+
+    return (
+        <div className="space-y-6 font-serif leading-relaxed text-lg">
+            {paragraphs.map((para, idx) => (
+                <p key={idx} className="indent-8 text-left">
+                    {para.map(token => renderToken(token))}
+                </p>
+            ))}
+        </div>
+    );
   };
 
   const renderTranslationMode = () => {
@@ -553,7 +567,7 @@ export default function App() {
 
         {/* Text Area */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-8 bg-gray-50">
-            <div className={`max-w-3xl mx-auto min-h-[50vh] ${mode !== PracticeMode.TRANSLATION ? 'bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-10 leading-loose text-lg text-gray-800' : ''}`}>
+            <div className={`max-w-3xl mx-auto min-h-[50vh] ${mode !== PracticeMode.TRANSLATION ? 'bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-10 text-gray-800' : ''}`}>
                 {activeEssay ? (
                     !activeEssay.isAnalyzed ? (
                         <div className="flex flex-col items-center justify-center h-40 text-gray-400">
@@ -564,11 +578,7 @@ export default function App() {
                         mode === PracticeMode.TRANSLATION ? (
                             renderTranslationMode()
                         ) : (
-                            <div className="space-y-4">
-                                <div className="font-serif leading-9">
-                                    {activeEssay.tokens.map(token => renderToken(token))}
-                                </div>
-                            </div>
+                            renderEssayContent()
                         )
                     )
                 ) : (
