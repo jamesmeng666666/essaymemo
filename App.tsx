@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { v4 as uuidv4 } from 'uuid'; // Simple ID generator logic can be replaced if library not available, but assuming environment supports basic JS.
-import { 
-    ESSAY_1_TITLE, ESSAY_1_CONTENT, ESSAY_1_PRE_DATA,
-    ESSAY_2_TITLE, ESSAY_2_CONTENT, ESSAY_2_PRE_DATA
-} from './constants';
+import { v4 as uuidv4 } from 'uuid'; 
+import { INITIAL_ESSAYS } from './constants';
 import { Essay, PracticeMode, Token, UserAnswers, VerificationResult } from './types';
 import { analyzeTextForMemorization, analyzeTextForTranslation } from './services/geminiService';
 import { playText, stopAudio } from './services/audioService';
@@ -66,47 +63,27 @@ export default function App() {
 
   // Initialization
   useEffect(() => {
-    const savedEssays = localStorage.getItem('memomaster_essays');
+    // Changed key to v2 to force refresh with new essay data
+    const STORAGE_KEY = 'memomaster_essays_v2';
+    const savedEssays = localStorage.getItem(STORAGE_KEY);
+    
     if (savedEssays) {
       const parsed = JSON.parse(savedEssays);
       setEssays(parsed);
       if (parsed.length > 0) setActiveEssayId(parsed[0].id);
     } else {
-      // Load initial essays if none exist
-      const id1 = generateId();
-      const id2 = generateId(); // Ensure unique IDs
-
-      // Hydrate pre-analyzed data with IDs
-      const essay1: Essay = {
-        id: id1,
-        title: ESSAY_1_TITLE,
-        rawContent: ESSAY_1_CONTENT,
-        tokens: ESSAY_1_PRE_DATA.tokens.map((t, i) => ({ ...t, id: `def1-tok-${i}` })),
-        sentences: ESSAY_1_PRE_DATA.sentences.map((s, i) => ({ ...s, id: `def1-sent-${i}` })),
-        isAnalyzed: true,
-        createdAt: Date.now()
-      };
-
-      const essay2: Essay = {
-        id: id2,
-        title: ESSAY_2_TITLE,
-        rawContent: ESSAY_2_CONTENT,
-        tokens: ESSAY_2_PRE_DATA.tokens.map((t, i) => ({ ...t, id: `def2-tok-${i}` })),
-        sentences: ESSAY_2_PRE_DATA.sentences.map((s, i) => ({ ...s, id: `def2-sent-${i}` })),
-        isAnalyzed: true, 
-        createdAt: Date.now() + 1
-      };
-
-      setEssays([essay1, essay2]);
-      setActiveEssayId(id1);
+      // Load initial essays from updated constants
+      setEssays(INITIAL_ESSAYS);
+      if (INITIAL_ESSAYS.length > 0) setActiveEssayId(INITIAL_ESSAYS[0].id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Save to local storage whenever essays change
   useEffect(() => {
+    const STORAGE_KEY = 'memomaster_essays_v2';
     if (essays.length > 0) {
-      localStorage.setItem('memomaster_essays', JSON.stringify(essays));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(essays));
     }
   }, [essays]);
 
@@ -161,7 +138,8 @@ export default function App() {
     if (window.confirm("Are you sure you want to delete this essay?")) {
         const newEssays = essays.filter(ex => ex.id !== id);
         setEssays(newEssays);
-        localStorage.setItem('memomaster_essays', JSON.stringify(newEssays));
+        // Changed key to v2
+        localStorage.setItem('memomaster_essays_v2', JSON.stringify(newEssays));
         if (activeEssayId === id) {
             setActiveEssayId(newEssays.length > 0 ? newEssays[0].id : null);
         }
