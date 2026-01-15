@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid'; 
 import { INITIAL_ESSAYS } from './constants';
 import { Essay, PracticeMode, Token, UserAnswers, VerificationResult } from './types';
-import { analyzeTextForMemorization, analyzeTextForTranslation } from './services/geminiService';
-import { playText, stopAudio } from './services/audioService';
+import { analyzeTextForMemorization, analyzeTextForTranslation, generateSpeechForText } from './services/geminiService';
+import { playText, playWav, pcmToWav, stopAudio } from './services/audioService';
+import { saveAudioToDB, getAudioFromDB, hasAudioInDB } from './services/storageService';
 
 // --- Icons ---
 const PlayIcon = () => (
@@ -29,6 +30,12 @@ const XIcon = () => (
 );
 const PrinterIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+);
+const DownloadIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+);
+const CheckCircleIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
 );
 
 const LoadingSpinner = () => (
@@ -63,6 +70,8 @@ export default function App() {
 
   // State for Audio
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasOfflineAudio, setHasOfflineAudio] = useState(false);
+  const [isDownloadingAudio, setIsDownloadingAudio] = useState(false);
 
   // Initialization
   useEffect(() => {
@@ -82,6 +91,18 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Check for offline audio when active essay changes
+  useEffect(() => {
+      if (activeEssayId) {
+          hasAudioInDB(activeEssayId).then(exists => {
+              setHasOfflineAudio(exists);
+          });
+          // Stop audio if switching essays
+          stopAudio();
+          setIsPlaying(false);
+      }
+  }, [activeEssayId]);
+
   // Save to local storage whenever essays change
   useEffect(() => {
     const STORAGE_KEY = 'memomaster_essays_v3';
@@ -90,17 +111,14 @@ export default function App() {
     }
   }, [essays]);
 
-  // Reset answers and STOP AUDIO when mode or essay changes
+  // Reset answers when mode changes
   useEffect(() => {
     setAnswers({});
     setResults(null);
     setScore(null);
-    
-    // Stop audio
     stopAudio();
     setIsPlaying(false);
-    
-  }, [mode, activeEssayId]);
+  }, [mode]);
 
   const activeEssay = essays.find(e => e.id === activeEssayId);
 
@@ -141,7 +159,6 @@ export default function App() {
     if (window.confirm("Are you sure you want to delete this essay?")) {
         const newEssays = essays.filter(ex => ex.id !== id);
         setEssays(newEssays);
-        // Changed key to v3
         localStorage.setItem('memomaster_essays_v3', JSON.stringify(newEssays));
         if (activeEssayId === id) {
             setActiveEssayId(newEssays.length > 0 ? newEssays[0].id : null);
@@ -154,7 +171,31 @@ export default function App() {
       setIsMobileMenuOpen(false);
   }
 
-  const handlePlayAudio = () => {
+  const handleDownloadAudio = async () => {
+    if (!activeEssay) return;
+    if (!process.env.API_KEY) {
+        alert("Please set your API_KEY to download high-quality audio.");
+        return;
+    }
+
+    setIsDownloadingAudio(true);
+    try {
+        // 1. Get raw PCM from Gemini
+        const pcmData = await generateSpeechForText(activeEssay.rawContent);
+        // 2. Convert to WAV
+        const wavData = pcmToWav(pcmData);
+        // 3. Save WAV to DB
+        await saveAudioToDB(activeEssay.id, wavData);
+        setHasOfflineAudio(true);
+    } catch (e) {
+        console.error(e);
+        alert("Failed to download audio. Please check your network or API key.");
+    } finally {
+        setIsDownloadingAudio(false);
+    }
+  };
+
+  const handlePlayAudio = async () => {
     if (!activeEssay) return;
     
     if (isPlaying) {
@@ -162,9 +203,17 @@ export default function App() {
         setIsPlaying(false);
     } else {
         setIsPlaying(true);
-        playText(activeEssay.rawContent, () => {
-            setIsPlaying(false);
-        });
+        
+        // Try to play from IndexedDB cache first (Offline High Quality WAV)
+        const cachedAudio = await getAudioFromDB(activeEssay.id);
+        if (cachedAudio) {
+             playWav(cachedAudio, () => setIsPlaying(false));
+        } else {
+             // Fallback to Web Speech API (Browser TTS)
+             playText(activeEssay.rawContent, () => {
+                setIsPlaying(false);
+            });
+        }
     }
   };
 
@@ -544,14 +593,35 @@ export default function App() {
             <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4 px-4 pointer-events-none z-30 print:hidden">
                 <div className="bg-white/90 backdrop-blur-md shadow-lg border border-gray-200 rounded-full p-2 flex items-center gap-4 pointer-events-auto pr-6">
                     
-                    {/* Audio Control (Only show in Read/Blank modes, usually not needed in Translation input mode, but good to have) */}
-                    <button 
-                        onClick={handlePlayAudio}
-                        className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 transition-colors"
-                        title="Read Aloud (TTS)"
-                    >
-                        {isPlaying ? <PauseIcon /> : <PlayIcon />}
-                    </button>
+                    {/* Audio Control */}
+                    <div className="flex items-center gap-2">
+                        {/* Download / Prepare Button */}
+                         <button 
+                            onClick={handleDownloadAudio}
+                            disabled={isDownloadingAudio || hasOfflineAudio}
+                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                                hasOfflineAudio 
+                                ? 'bg-green-100 text-green-600 cursor-default' 
+                                : 'bg-blue-100 hover:bg-blue-200 text-blue-700'
+                            } ${isDownloadingAudio ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            title={hasOfflineAudio ? "Audio Ready (Offline)" : "Download High-Quality Voice"}
+                        >
+                            {isDownloadingAudio ? <LoadingSpinner /> : (hasOfflineAudio ? <CheckCircleIcon /> : <DownloadIcon />)}
+                        </button>
+                        
+                        {/* Play Button */}
+                        <button 
+                            onClick={handlePlayAudio}
+                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                                isPlaying 
+                                    ? 'bg-blue-600 text-white' 
+                                    : (hasOfflineAudio ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 hover:bg-gray-200 text-gray-700')
+                            }`}
+                            title={hasOfflineAudio ? "Play Offline Voice" : "Play (System Voice)"}
+                        >
+                            {isPlaying ? <PauseIcon /> : <PlayIcon />}
+                        </button>
+                    </div>
 
                     <div className="w-px h-6 bg-gray-300"></div>
 

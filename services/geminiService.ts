@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Modality, Type } from "@google/genai";
 import { Token, Sentence } from "../types";
 
@@ -11,11 +12,20 @@ const getClient = () => {
     return new GoogleGenAI({ apiKey });
 };
 
+// Helper: Decode Base64 string to Uint8Array
+const base64ToUint8Array = (base64: string): Uint8Array => {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes;
+}
+
 export const analyzeTextForMemorization = async (text: string): Promise<Token[]> => {
   const ai = getClient();
   
-  // We need a structured response to identify Nouns, Verbs, Adjectives, Adverbs
-  // while preserving the EXACT structure of the text (including punctuation) for reconstruction.
   const prompt = `
     Analyze the following English text for a fill-in-the-blank exercise.
     Break the text down into a sequence of tokens that can perfectly reconstruct the original text.
@@ -109,7 +119,41 @@ export const analyzeTextForTranslation = async (text: string): Promise<Sentence[
 
     } catch (error) {
         console.error("Gemini Translation Analysis Failed:", error);
-        // Fallback or rethrow
+        throw error;
+    }
+}
+
+export const generateSpeechForText = async (text: string): Promise<Uint8Array> => {
+    const ai = getClient();
+
+    // Use the specific TTS model
+    const model = 'gemini-2.5-flash-preview-tts';
+    
+    try {
+        const response = await ai.models.generateContent({
+            model: model,
+            contents: {
+                parts: [{ text: text }]
+            },
+            config: {
+                responseModalities: [Modality.AUDIO],
+                speechConfig: {
+                    voiceConfig: {
+                        prebuiltVoiceConfig: { voiceName: 'Kore' }, // 'Kore' is a good, neutral voice
+                    },
+                },
+            },
+        });
+
+        const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+        if (!base64Audio) {
+            throw new Error("No audio data returned from Gemini.");
+        }
+
+        return base64ToUint8Array(base64Audio);
+
+    } catch (error) {
+        console.error("Gemini TTS Generation Failed:", error);
         throw error;
     }
 }
