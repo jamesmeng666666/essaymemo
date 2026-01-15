@@ -27,6 +27,9 @@ const MenuIcon = () => (
 const XIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
 );
+const PrinterIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+);
 
 const LoadingSpinner = () => (
     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
@@ -63,8 +66,8 @@ export default function App() {
 
   // Initialization
   useEffect(() => {
-    // Changed key to v2 to force refresh with new essay data
-    const STORAGE_KEY = 'memomaster_essays_v2';
+    // Changed key to v3 to force refresh with new translation data
+    const STORAGE_KEY = 'memomaster_essays_v3';
     const savedEssays = localStorage.getItem(STORAGE_KEY);
     
     if (savedEssays) {
@@ -81,7 +84,7 @@ export default function App() {
 
   // Save to local storage whenever essays change
   useEffect(() => {
-    const STORAGE_KEY = 'memomaster_essays_v2';
+    const STORAGE_KEY = 'memomaster_essays_v3';
     if (essays.length > 0) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(essays));
     }
@@ -138,8 +141,8 @@ export default function App() {
     if (window.confirm("Are you sure you want to delete this essay?")) {
         const newEssays = essays.filter(ex => ex.id !== id);
         setEssays(newEssays);
-        // Changed key to v2
-        localStorage.setItem('memomaster_essays_v2', JSON.stringify(newEssays));
+        // Changed key to v3
+        localStorage.setItem('memomaster_essays_v3', JSON.stringify(newEssays));
         if (activeEssayId === id) {
             setActiveEssayId(newEssays.length > 0 ? newEssays[0].id : null);
         }
@@ -163,6 +166,10 @@ export default function App() {
             setIsPlaying(false);
         });
     }
+  };
+
+  const handlePrint = () => {
+      window.print();
   };
 
   const isTokenHidden = (token: Token) => {
@@ -286,7 +293,7 @@ export default function App() {
                     autoCapitalize="off"
                 />
                 {isChecked && !isCorrect && (
-                     <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                     <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg print:hidden">
                         {token.text}
                      </span>
                 )}
@@ -342,7 +349,7 @@ export default function App() {
                 const isCorrect = isChecked ? results[sent.id] : undefined;
                 
                 return (
-                    <div key={sent.id} className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
+                    <div key={sent.id} className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm print:border-none print:shadow-none print:p-0 print:mb-8">
                          <div className="mb-2 text-gray-500 text-sm font-semibold tracking-wide uppercase">Sentence {idx + 1}</div>
                          <div className="mb-3 text-lg font-medium text-gray-900">{sent.chinese}</div>
                          <textarea 
@@ -357,7 +364,7 @@ export default function App() {
                              onChange={(e) => handleInputChange(sent.id, e.target.value)}
                          />
                          {isChecked && !isCorrect && (
-                             <div className="mt-2 text-green-700 bg-green-50 p-2 rounded-md border border-green-200 text-sm">
+                             <div className="mt-2 text-green-700 bg-green-50 p-2 rounded-md border border-green-200 text-sm print:hidden">
                                  <strong>Correct:</strong> {sent.english}
                              </div>
                          )}
@@ -413,10 +420,10 @@ export default function App() {
   // --- Main Render ---
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="flex h-screen overflow-hidden bg-gray-50 print:block print:h-auto print:overflow-visible">
       
       {/* Sidebar (Desktop) */}
-      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex">
+      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex print:hidden">
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
             <h1 className="font-bold text-xl text-blue-600 tracking-tight">MemoMaster AI</h1>
         </div>
@@ -424,10 +431,10 @@ export default function App() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col h-full relative">
+      <main className="flex-1 flex flex-col h-full relative print:block print:h-auto print:overflow-visible">
         
         {/* Mobile Header */}
-        <div className="md:hidden bg-white border-b p-4 flex justify-between items-center z-20 relative shadow-sm">
+        <div className="md:hidden bg-white border-b p-4 flex justify-between items-center z-20 relative shadow-sm print:hidden">
              <button onClick={() => setIsMobileMenuOpen(true)} className="text-gray-600 hover:text-blue-600">
                  <MenuIcon />
              </button>
@@ -439,7 +446,7 @@ export default function App() {
 
         {/* Mobile Sidebar Overlay */}
         {isMobileMenuOpen && (
-            <div className="fixed inset-0 z-50 md:hidden flex">
+            <div className="fixed inset-0 z-50 md:hidden flex print:hidden">
                 <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}></div>
                 <div className="relative bg-white w-64 h-full shadow-xl flex flex-col animate-in slide-in-from-left duration-200">
                     <div className="p-4 border-b border-gray-100 flex items-center justify-between">
@@ -455,15 +462,24 @@ export default function App() {
 
         {/* Top Control Bar */}
         {activeEssay && (
-        <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm z-10">
-            <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 truncate max-w-xs sm:max-w-md">{activeEssay.title}</h2>
-                <div className="text-sm text-gray-400 mt-1">
-                    {activeEssay.tokens.length > 0 ? `${activeEssay.tokens.filter(t=>!t.isSeparator).length} words` : 'Processing...'}
+        <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm z-10 print:border-none print:shadow-none print:px-0">
+            <div className="flex items-center gap-3">
+                <div className="flex-1">
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800 truncate max-w-xs sm:max-w-md print:max-w-none">{activeEssay.title}</h2>
+                    <div className="text-sm text-gray-400 mt-1 print:hidden">
+                        {activeEssay.tokens.length > 0 ? `${activeEssay.tokens.filter(t=>!t.isSeparator).length} words` : 'Processing...'}
+                    </div>
                 </div>
+                 <button 
+                    onClick={handlePrint} 
+                    className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors print:hidden"
+                    title="Print Essay"
+                >
+                    <PrinterIcon />
+                </button>
             </div>
 
-            <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-lg self-start sm:self-auto overflow-x-auto max-w-full no-scrollbar">
+            <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-lg self-start sm:self-auto overflow-x-auto max-w-full no-scrollbar print:hidden">
                 <button
                     onClick={() => setMode(PracticeMode.READ)}
                     className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${mode === PracticeMode.READ ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
@@ -500,8 +516,8 @@ export default function App() {
         )}
 
         {/* Text Area */}
-        <div className="flex-1 overflow-y-auto p-2 sm:p-8 bg-gray-50">
-            <div className={`max-w-3xl mx-auto min-h-[50vh] ${mode !== PracticeMode.TRANSLATION ? 'bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-10 text-gray-800' : ''}`}>
+        <div className="flex-1 overflow-y-auto p-2 sm:p-8 bg-gray-50 print:overflow-visible print:h-auto print:bg-white print:p-0">
+            <div className={`max-w-3xl mx-auto min-h-[50vh] ${mode !== PracticeMode.TRANSLATION ? 'bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-10 text-gray-800' : ''} print:max-w-none print:shadow-none print:border-none print:p-0`}>
                 {activeEssay ? (
                     !activeEssay.isAnalyzed ? (
                         <div className="flex flex-col items-center justify-center h-40 text-gray-400">
@@ -520,12 +536,12 @@ export default function App() {
                 )}
             </div>
              {/* Spacer for bottom bar */}
-             <div className="h-24"></div>
+             <div className="h-24 print:hidden"></div>
         </div>
 
         {/* Bottom Sticky Action Bar */}
         {activeEssay && activeEssay.isAnalyzed && (
-            <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4 px-4 pointer-events-none z-30">
+            <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4 px-4 pointer-events-none z-30 print:hidden">
                 <div className="bg-white/90 backdrop-blur-md shadow-lg border border-gray-200 rounded-full p-2 flex items-center gap-4 pointer-events-auto pr-6">
                     
                     {/* Audio Control (Only show in Read/Blank modes, usually not needed in Translation input mode, but good to have) */}
@@ -566,7 +582,7 @@ export default function App() {
 
         {/* Add Modal */}
         {isAddModalOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 print:hidden">
                 <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden">
                     <div className="p-6">
                         <h3 className="text-xl font-bold text-gray-800 mb-4">Add New Essay</h3>
