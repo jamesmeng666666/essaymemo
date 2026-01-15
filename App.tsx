@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { INITIAL_ESSAYS } from './constants';
 import { Essay, PracticeMode, Token, UserAnswers, VerificationResult } from './types';
 import { analyzeTextForMemorization, analyzeTextForTranslation, generateSpeechForText } from './services/geminiService';
-import { playText, playWav, pcmToWav, stopAudio } from './services/audioService';
+import { playText, playWav, playAudioFromURL, pcmToWav, stopAudio } from './services/audioService';
 import { saveAudioToDB, getAudioFromDB, hasAudioInDB } from './services/storageService';
 
 // --- Icons ---
@@ -33,9 +33,6 @@ const PrinterIcon = () => (
 );
 const DownloadIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-);
-const CheckCircleIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
 );
 
 const LoadingSpinner = () => (
@@ -70,8 +67,8 @@ export default function App() {
 
   // State for Audio
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hasOfflineAudio, setHasOfflineAudio] = useState(false);
   const [isDownloadingAudio, setIsDownloadingAudio] = useState(false);
+  const [isLocalFileReady, setIsLocalFileReady] = useState(false);
 
   // Initialization
   useEffect(() => {
@@ -80,7 +77,21 @@ export default function App() {
     const savedEssays = localStorage.getItem(STORAGE_KEY);
     
     if (savedEssays) {
-      const parsed = JSON.parse(savedEssays);
+      let parsed = JSON.parse(savedEssays);
+      
+      // Update logic: Sync `audioPath` from INITIAL_ESSAYS to `savedEssays`
+      // This ensures that if the code is updated with new paths, existing users get them.
+      parsed = parsed.map((saved: Essay) => {
+          const fresh = INITIAL_ESSAYS.find(init => init.title === saved.title);
+          if (fresh) {
+              return {
+                  ...saved,
+                  audioPath: fresh.audioPath
+              };
+          }
+          return saved;
+      });
+
       setEssays(parsed);
       if (parsed.length > 0) setActiveEssayId(parsed[0].id);
     } else {
@@ -91,18 +102,6 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Check for offline audio when active essay changes
-  useEffect(() => {
-      if (activeEssayId) {
-          hasAudioInDB(activeEssayId).then(exists => {
-              setHasOfflineAudio(exists);
-          });
-          // Stop audio if switching essays
-          stopAudio();
-          setIsPlaying(false);
-      }
-  }, [activeEssayId]);
-
   // Save to local storage whenever essays change
   useEffect(() => {
     const STORAGE_KEY = 'memomaster_essays_v3';
@@ -110,6 +109,29 @@ export default function App() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(essays));
     }
   }, [essays]);
+
+  // Check for local file existence when active essay changes
+  useEffect(() => {
+      const checkFile = async () => {
+          if (!activeEssayId) return;
+          const essay = essays.find(e => e.id === activeEssayId);
+          if (essay && essay.audioPath) {
+              try {
+                  // Add cache buster to avoid cached 404s
+                  const res = await fetch(`${essay.audioPath}?t=${Date.now()}`, { method: 'HEAD' });
+                  setIsLocalFileReady(res.ok);
+              } catch (e) {
+                  setIsLocalFileReady(false);
+              }
+          } else {
+              setIsLocalFileReady(false);
+          }
+          // Stop audio if switching essays
+          stopAudio();
+          setIsPlaying(false);
+      };
+      checkFile();
+  }, [activeEssayId, essays]);
 
   // Reset answers when mode changes
   useEffect(() => {
@@ -171,10 +193,11 @@ export default function App() {
       setIsMobileMenuOpen(false);
   }
 
-  const handleDownloadAudio = async () => {
+  // --- Audio Export Logic ---
+  const handleExportAudio = async () => {
     if (!activeEssay) return;
     if (!process.env.API_KEY) {
-        alert("Please set your API_KEY to download high-quality audio.");
+        alert("Please set your API_KEY to generate high-quality audio.");
         return;
     }
 
@@ -184,12 +207,42 @@ export default function App() {
         const pcmData = await generateSpeechForText(activeEssay.rawContent);
         // 2. Convert to WAV
         const wavData = pcmToWav(pcmData);
-        // 3. Save WAV to DB
-        await saveAudioToDB(activeEssay.id, wavData);
-        setHasOfflineAudio(true);
+        // 3. Create a download link
+        const blob = new Blob([wavData], { type: 'audio/wav' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        
+        // Use the configured audioPath filename if available, otherwise default
+        let filename = 'audio.wav';
+        if (activeEssay.audioPath) {
+            // Extract filename from path (e.g., /audio/nie_er.wav -> nie_er.wav)
+            const parts = activeEssay.audioPath.split('/');
+            filename = parts[parts.length - 1];
+        } else {
+             filename = `${activeEssay.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.wav`;
+        }
+        
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        
+        // Cleanup
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        // Trigger a check to see if the user moves it
+        setTimeout(() => {
+             if (activeEssay.audioPath) {
+                  fetch(`${activeEssay.audioPath}?t=${Date.now()}`, { method: 'HEAD' }).then(res => setIsLocalFileReady(res.ok)).catch(()=>{});
+             }
+        }, 5000);
+
+        alert(`Downloaded ${filename}!\n\nPlease move this file to: \n<YourProject>/public/audio/${filename}\n\nThen it will be detected automatically.`);
+
     } catch (e) {
         console.error(e);
-        alert("Failed to download audio. Please check your network or API key.");
+        alert("Failed to generate audio. Please check your network or API key.");
     } finally {
         setIsDownloadingAudio(false);
     }
@@ -203,19 +256,34 @@ export default function App() {
         setIsPlaying(false);
     } else {
         setIsPlaying(true);
-        
-        // Try to play from IndexedDB cache first (Offline High Quality WAV)
-        const cachedAudio = await getAudioFromDB(activeEssay.id);
-        if (cachedAudio) {
-             playWav(cachedAudio, () => setIsPlaying(false));
+        const onFinish = () => setIsPlaying(false);
+
+        // Priority 1: Local File in public/audio
+        if (isLocalFileReady && activeEssay.audioPath) {
+             console.log("Playing from local file:", activeEssay.audioPath);
+             playAudioFromURL(activeEssay.audioPath, onFinish, () => {
+                 // Error fallback
+                 console.warn("Local file failed, trying cache");
+                 playFromCacheOrTTS(onFinish);
+             });
         } else {
-             // Fallback to Web Speech API (Browser TTS)
-             playText(activeEssay.rawContent, () => {
-                setIsPlaying(false);
-            });
+             // Priority 2/3: Cache or TTS
+             playFromCacheOrTTS(onFinish);
         }
     }
   };
+
+  const playFromCacheOrTTS = async (onFinish: () => void) => {
+       if (!activeEssay) return;
+       // Fallback 1: Cache
+       const cachedAudio = await getAudioFromDB(activeEssay.id);
+       if (cachedAudio) {
+            playWav(cachedAudio, onFinish);
+       } else {
+            // Fallback 2: TTS
+            playText(activeEssay.rawContent, onFinish);
+       }
+  }
 
   const handlePrint = () => {
       window.print();
@@ -380,7 +448,7 @@ export default function App() {
     return (
         <div className="space-y-6 font-serif leading-relaxed text-base md:text-lg">
             {paragraphs.map((para, idx) => (
-                <p key={idx} className="indent-6 md:indent-8 text-left">
+                <p key={idx} className="indent-6 md:indent-8 text-left break-words">
                     {para.map(token => renderToken(token))}
                 </p>
             ))}
@@ -480,7 +548,7 @@ export default function App() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col h-full relative print:block print:h-auto print:overflow-visible">
+      <main className="flex-1 flex flex-col h-full relative min-w-0 print:block print:h-auto print:overflow-visible">
         
         {/* Mobile Header */}
         <div className="md:hidden bg-white border-b p-4 flex justify-between items-center z-20 relative shadow-sm print:hidden">
@@ -512,23 +580,23 @@ export default function App() {
         {/* Top Control Bar */}
         {activeEssay && (
         <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm z-10 print:border-none print:shadow-none print:px-0">
-            <div className="flex items-center gap-3">
-                <div className="flex-1">
-                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800 truncate max-w-xs sm:max-w-md print:max-w-none">{activeEssay.title}</h2>
+            <div className="flex items-center gap-3 min-w-0">
+                <div className="flex-1 min-w-0">
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800 truncate">{activeEssay.title}</h2>
                     <div className="text-sm text-gray-400 mt-1 print:hidden">
                         {activeEssay.tokens.length > 0 ? `${activeEssay.tokens.filter(t=>!t.isSeparator).length} words` : 'Processing...'}
                     </div>
                 </div>
                  <button 
                     onClick={handlePrint} 
-                    className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors print:hidden"
+                    className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors print:hidden flex-shrink-0"
                     title="Print Essay"
                 >
                     <PrinterIcon />
                 </button>
             </div>
 
-            <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-lg self-start sm:self-auto overflow-x-auto max-w-full no-scrollbar print:hidden">
+            <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-lg self-start sm:self-auto overflow-x-auto max-w-full no-scrollbar print:hidden w-full sm:w-auto">
                 <button
                     onClick={() => setMode(PracticeMode.READ)}
                     className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${mode === PracticeMode.READ ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
@@ -565,7 +633,7 @@ export default function App() {
         )}
 
         {/* Text Area */}
-        <div className="flex-1 overflow-y-auto p-2 sm:p-8 bg-gray-50 print:overflow-visible print:h-auto print:bg-white print:p-0">
+        <div className="flex-1 overflow-y-auto p-2 sm:p-8 bg-gray-50 print:overflow-visible print:h-auto print:bg-white print:p-0 w-full">
             <div className={`max-w-3xl mx-auto min-h-[50vh] ${mode !== PracticeMode.TRANSLATION ? 'bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-10 text-gray-800' : ''} print:max-w-none print:shadow-none print:border-none print:p-0`}>
                 {activeEssay ? (
                     !activeEssay.isAnalyzed ? (
@@ -591,22 +659,18 @@ export default function App() {
         {/* Bottom Sticky Action Bar */}
         {activeEssay && activeEssay.isAnalyzed && (
             <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4 px-4 pointer-events-none z-30 print:hidden">
-                <div className="bg-white/90 backdrop-blur-md shadow-lg border border-gray-200 rounded-full p-2 flex items-center gap-4 pointer-events-auto pr-6">
+                <div className="bg-white/90 backdrop-blur-md shadow-lg border border-gray-200 rounded-full p-2 flex items-center gap-2 sm:gap-4 pointer-events-auto pr-4 sm:pr-6 max-w-full overflow-x-auto no-scrollbar">
                     
                     {/* Audio Control */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-shrink-0">
                         {/* Download / Prepare Button */}
                          <button 
-                            onClick={handleDownloadAudio}
-                            disabled={isDownloadingAudio || hasOfflineAudio}
-                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                                hasOfflineAudio 
-                                ? 'bg-green-100 text-green-600 cursor-default' 
-                                : 'bg-blue-100 hover:bg-blue-200 text-blue-700'
-                            } ${isDownloadingAudio ? 'opacity-50 cursor-not-allowed' : ''}`}
-                            title={hasOfflineAudio ? "Audio Ready (Offline)" : "Download High-Quality Voice"}
+                            onClick={handleExportAudio}
+                            disabled={isDownloadingAudio}
+                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors bg-blue-100 hover:bg-blue-200 text-blue-700 ${isDownloadingAudio ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            title={isLocalFileReady ? "Download again" : "Generate Audio File (Required for offline use)"}
                         >
-                            {isDownloadingAudio ? <LoadingSpinner /> : (hasOfflineAudio ? <CheckCircleIcon /> : <DownloadIcon />)}
+                            {isDownloadingAudio ? <LoadingSpinner /> : <DownloadIcon />}
                         </button>
                         
                         {/* Play Button */}
@@ -615,19 +679,28 @@ export default function App() {
                             className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
                                 isPlaying 
                                     ? 'bg-blue-600 text-white' 
-                                    : (hasOfflineAudio ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 hover:bg-gray-200 text-gray-700')
+                                    : (isLocalFileReady ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700')
                             }`}
-                            title={hasOfflineAudio ? "Play Offline Voice" : "Play (System Voice)"}
+                            title={isLocalFileReady ? "Play (Local High-Quality File)" : "Play (Missing Local File - Using Web Fallback)"}
                         >
                             {isPlaying ? <PauseIcon /> : <PlayIcon />}
                         </button>
+                        
+                        {/* Status Text */}
+                        <div className="text-xs font-medium px-2 hidden sm:block whitespace-nowrap">
+                            {isLocalFileReady ? (
+                                <span className="text-green-600">Local Audio Ready</span>
+                            ) : (
+                                <span className="text-orange-500">Missing Local Audio</span>
+                            )}
+                        </div>
                     </div>
 
-                    <div className="w-px h-6 bg-gray-300"></div>
+                    <div className="w-px h-6 bg-gray-300 flex-shrink-0"></div>
 
                     {/* Check Action (Only in practice modes) */}
                     {mode !== PracticeMode.READ && (
-                         <div className="flex items-center gap-4">
+                         <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
                             {score !== null && (
                                 <div className={`font-bold text-lg ${score > 80 ? 'text-green-600' : 'text-orange-500'}`}>
                                     {score}%
@@ -635,7 +708,7 @@ export default function App() {
                             )}
                             <button
                                 onClick={checkAnswers}
-                                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full font-medium shadow-md transition-transform active:scale-95 whitespace-nowrap"
+                                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-5 py-2 rounded-full font-medium shadow-md transition-transform active:scale-95 whitespace-nowrap"
                             >
                                 <CheckIcon /> <span className="hidden sm:inline">Check Answers</span><span className="sm:hidden">Check</span>
                             </button>
@@ -643,7 +716,7 @@ export default function App() {
                     )}
                     
                     {mode === PracticeMode.READ && (
-                        <span className="text-sm text-gray-500 font-medium px-2">Read Mode</span>
+                        <span className="text-sm text-gray-500 font-medium px-2 whitespace-nowrap">Read Mode</span>
                     )}
 
                 </div>

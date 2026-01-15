@@ -55,6 +55,7 @@ const smartTokenize = (text: string): Token[] => {
 const RAW_ESSAYS = [
     {
         title: "8AU1: Nie Er",
+        audioPath: "/audio/nie_er.wav",
         content: `Nie Er, originally named Nie Shouxin, was born in Yunnan in 1912. He showed extraordinary talent in music from an early age. He could pick up any song after hearing it just once or twice. Besides, he had a special skill of moving his ears, so people gave him the nickname "Erduo", which he later adopted as his formal name. 
 
 As a gifted composer, Nie Er created over 30 songs during his life. Many of these works showed ordinary people's suffering. His greatest achievement is composing the music for China's national anthem, which encouraged people to fight for the nation. 
@@ -75,6 +76,7 @@ Sadly, Nie Er passed away at the young age of 23. However, his music has lived o
     },
     {
         title: "8AU2: Intangible Cultural Heritage",
+        audioPath: "/audio/cultural_heritage.wav",
         content: `This year, our Intangible Cultural Heritage Experience Base has attracted a large number of tourists. We recorded the monthly tourist numbers from January to June and conducted a tourist satisfaction survey. 
 
 According to the first graph, there were about 25,000 tourists in January and 22,000 in February. The number rose to 35,000 in March, fell to 22,000 in April, then peaked at 40,000 in May. It dropped sharply to 20,000 in June. 
@@ -97,6 +99,7 @@ To improve the situation, we plan to add more activity areas to reduce waiting t
     },
     {
         title: "8AU3: AI in Studies",
+        audioPath: "/audio/ai_in_studies.wav",
         content: `Hello, everyone! I'm very glad to stand here and share my opinions of using AI in studies. 
 
 First, AI tools can help me check for mistakes and correct them. Besides, they help me save time by providing information quickly. What's more, an AI tool can provide the answer to a challenging maths problem and explain how to arrive at the answer step by step. 
@@ -120,6 +123,7 @@ In short, AI tools can help us learn better and faster, but we must use them wis
     },
     {
         title: "8AU4: Mobile Payment",
+        audioPath: "/audio/mobile_payment.wav",
         content: `Mobile payment is one of the most wonderful inventions, which has totally changed how people manage money in daily life. 
 
 It brings great convenience to us. We no longer need to carry heavy wallets or bank cards. Besides, it helps us save time by scanning a QR code to pay quickly. What's more, all payment records are stored in the app automatically, making it easier to keep track of our spending. 
@@ -143,6 +147,7 @@ In short, despite its drawbacks, mobile payment is really a useful invention. We
     },
     {
         title: "8AU5: Letter to Mr and Mrs Li",
+        audioPath: "/audio/letter_to_li.wav",
         content: `Dear Mr and Mrs Li,
 
 I hope you are doing well. I'm writing to express my thanks to you for everything you have done during my stay in Shenzhen. 
@@ -172,6 +177,7 @@ Peter`,
     },
     {
         title: "8AU6: Empty City Plan",
+        audioPath: "/audio/empty_city_plan.wav",
         content: `Good morning, everyone! Welcome to Wisdom Today. I'm going to share the story of Zhuge Liang's Empty City Plan with you. 
 
 During the Three Kingdoms Period, Zhuge Liang was a smart general of Shu. One day, most of his soldiers went out to fight while only a few old and weak soldiers were left. Suddenly, Sima Yi's large army came to attack it. 
@@ -194,6 +200,7 @@ This story tells us that we should think wisely when we are in trouble because n
     },
     {
         title: "8AU7: Spaced Repetition",
+        audioPath: "/audio/spaced_repetition.wav",
         content: `Hi, everyone! Today, I'd like to share a useful memory technique - spaced repetition. 
 
 When we learn something new, like English words, we often tend to forget them quickly. Spaced repetition can help us. The key is to review the information at right intervals. First, review the information on the same day we learn it. Then check it again after 24 hours. A week later, make a point of going over it once more. And finally, review it after 30 days. This process helps move knowledge from our short-term memory to long-term memory. 
@@ -219,6 +226,7 @@ So, let's give spaced repetition a try! I'm sure it will help us achieve our lea
     },
     {
         title: "8AU8: Pets",
+        audioPath: "/audio/pets.wav",
         content: `Recently, more and more young people like to keep pets. Some of them think their pets are part of the family. 
 
 People keep pets mainly because they are lovely and can bring happiness. Pets are good companions, especially for the elderly and children, helping them feel less lonely. Playing with pets after school or work can help us relax. Moreover, taking care of pets teaches us responsibility and how to care for others. 
@@ -252,5 +260,6 @@ export const INITIAL_ESSAYS: Essay[] = RAW_ESSAYS.map(raw => ({
     tokens: smartTokenize(raw.content),
     sentences: raw.sentences.map((s, i) => ({ ...s, id: `s-${i}-${Date.now()}` })), // Use pre-defined sentences
     isAnalyzed: true, 
-    createdAt: Date.now()
+    createdAt: Date.now(),
+    audioPath: raw.audioPath
 }));

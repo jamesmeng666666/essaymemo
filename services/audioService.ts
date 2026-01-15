@@ -73,7 +73,7 @@ const chunkText = (text: string): string[] => {
 };
 
 const speakNext = () => {
-    if (!synth || queue.length === 0) {
+    if (!synth || queue.length === 0 || !isInternalPlaying) {
         isInternalPlaying = false;
         if (onCompleteGlobal) onCompleteGlobal();
         return;
@@ -85,12 +85,30 @@ const speakNext = () => {
     if (voice) utterance.voice = voice;
     utterance.rate = 0.9; 
     utterance.pitch = 1.0;
-    utterance.onend = () => speakNext();
-    utterance.onerror = (e) => {
-        console.error("TTS Error:", e);
-        speakNext();
+    
+    utterance.onend = () => {
+        if (isInternalPlaying) speakNext();
     };
-    synth.speak(utterance);
+
+    utterance.onerror = (e) => {
+        // Ignore errors caused by manual cancellation/interruption
+        if (e.error === 'canceled' || e.error === 'interrupted') {
+            isInternalPlaying = false;
+            return;
+        }
+        
+        console.error("TTS Error:", e.error);
+        
+        // Attempt to continue to next sentence/chunk despite error
+        if (isInternalPlaying) speakNext();
+    };
+    
+    try {
+        synth.speak(utterance);
+    } catch (err) {
+        console.error("synth.speak error", err);
+        if (isInternalPlaying) speakNext();
+    }
 };
 
 export const playText = (text: string, onComplete?: () => void) => {
@@ -110,9 +128,10 @@ export const playText = (text: string, onComplete?: () => void) => {
             if (isInternalPlaying) speakNext();
         };
         synth.onvoiceschanged = tempHandler;
+        // Extended timeout to 500ms to allow more time for voices to load
         setTimeout(() => {
             if (isInternalPlaying && synth!.speaking === false) speakNext();
-        }, 100);
+        }, 500);
     } else {
         speakNext();
     }
@@ -138,7 +157,16 @@ export const playWav = (wavData: ArrayBuffer, onComplete?: () => void) => {
     };
     
     audio.onerror = (e) => {
-        console.error("Audio Playback Error", e);
+        let message = "Unknown error";
+        // Type guard: Check if e is an Event and has a target property (narrowing down from Event | string)
+        if (typeof e === 'object' && e !== null && 'target' in e) {
+             const target = e.target as HTMLAudioElement;
+             if (target && target.error) message = target.error.message;
+        } else if (typeof e === 'string') {
+            message = e;
+        }
+
+        console.error("Audio Playback Error", message);
         isInternalPlaying = false;
         currentAudio = null;
         URL.revokeObjectURL(url);
@@ -150,6 +178,41 @@ export const playWav = (wavData: ArrayBuffer, onComplete?: () => void) => {
         if (onComplete) onComplete();
     });
 };
+
+export const playAudioFromURL = (url: string, onComplete?: () => void, onError?: () => void) => {
+    stopAudio();
+
+    const audio = new Audio(url);
+    currentAudio = audio;
+    isInternalPlaying = true;
+
+    audio.onended = () => {
+        isInternalPlaying = false;
+        currentAudio = null;
+        if (onComplete) onComplete();
+    };
+    
+    audio.onerror = (e) => {
+        let message = "Unknown error";
+        // Type guard: Check if e is an Event and has a target property (narrowing down from Event | string)
+        if (typeof e === 'object' && e !== null && 'target' in e) {
+             const target = e.target as HTMLAudioElement;
+             if (target && target.error) message = target.error.message;
+        } else if (typeof e === 'string') {
+            message = e;
+        }
+        
+        console.error("File Playback Error", message);
+        isInternalPlaying = false;
+        currentAudio = null;
+        if (onError) onError();
+    }
+
+    audio.play().catch(e => {
+        console.error("Play failed:", e);
+        if (onError) onError();
+    });
+}
 
 export const stopAudio = () => {
     isInternalPlaying = false;

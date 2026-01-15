@@ -22,6 +22,7 @@ export interface Essay {
   sentences?: Sentence[]; 
   isAnalyzed: boolean;
   createdAt: number;
+  audioPath?: string; // Path to local audio file (e.g., /audio/filename.wav)
 }
 
 export enum PracticeMode {
