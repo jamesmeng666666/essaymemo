@@ -250,6 +250,39 @@ In my opinion, keeping pets is a good idea if we can take proper care of them. W
             { english: "We should make sure they are clean, healthy, and well-trained.", chinese: "我们应该确保它们干净、健康并且训练有素。" },
             { english: "By this way, pets can bring us joy without causing trouble to others.", chinese: "通过这种方式，宠物可以给我们带来快乐，而不会给别人带来麻烦。" }
         ]
+    },
+    {
+        title: "8BU1: Digital Life Buddy",
+        audioPath: "/audio/digital_life_buddy.wav",
+        content: `Dear Mr Smith,
+
+I am writing to you about my plan to start a voluntary activity called "Digital Life Buddy". 
+
+I've found that many elderly foreign residents in our community have difficulty using Chinese digital services like WeChat Pay, Didi, and hospital booking apps. My classmates and I are willing to help. 
+
+In order to help them, we'll devote our spare time to offering one-to-one guidance. For instance, we'll teach them how to use these apps as well as solve their daily digital problems. Moreover, we'll prepare some notes in both English and Chinese to avoid confusion. 
+
+We hope to hold this activity on Sunday at the community hall. Could you please give us permission to organize it? Thank you for your support! 
+
+We look forward to your reply. 
+
+Yours sincerely,
+Li Hua`,
+        sentences: [
+            { english: "Dear Mr Smith,", chinese: "亲爱的史密斯先生，" },
+            { english: "I am writing to you about my plan to start a voluntary activity called \"Digital Life Buddy\".", chinese: "我写信给您是关于我计划开展一项名为“数字生活伙伴”的志愿活动。" },
+            { english: "I've found that many elderly foreign residents in our community have difficulty using Chinese digital services like WeChat Pay, Didi, and hospital booking apps.", chinese: "我发现我们社区的许多外国老年居民在使用微信支付、滴滴和医院预约等中国数字服务时遇到困难。" },
+            { english: "My classmates and I are willing to help.", chinese: "我和我的同学很乐意帮忙。" },
+            { english: "In order to help them, we'll devote our spare time to offering one-to-one guidance.", chinese: "为了帮助他们，我们将利用业余时间提供一对一的指导。" },
+            { english: "For instance, we'll teach them how to use these apps as well as solve their daily digital problems.", chinese: "例如，我们将教他们如何使用这些应用程序，并解决他们日常的数字问题。" },
+            { english: "Moreover, we'll prepare some notes in both English and Chinese to avoid confusion.", chinese: "此外，我们将准备中英文双语笔记以避免混淆。" },
+            { english: "We hope to hold this activity on Sunday at the community hall.", chinese: "我们希望周日在社区大厅举行这项活动。" },
+            { english: "Could you please give us permission to organize it?", chinese: "您能批准我们组织这项活动吗？" },
+            { english: "Thank you for your support!", chinese: "感谢您的支持！" },
+            { english: "We look forward to your reply.", chinese: "期待您的回复。" },
+            { english: "Yours sincerely,", chinese: "您真诚的，" },
+            { english: "Li Hua", chinese: "李华" }
+        ]
     }
 ];
 

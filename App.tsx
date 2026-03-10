@@ -92,6 +92,11 @@ export default function App() {
           return saved;
       });
 
+      // Add any new INITIAL_ESSAYS that are missing
+      const existingTitles = new Set(parsed.map((e: Essay) => e.title));
+      const newEssays = INITIAL_ESSAYS.filter(init => !existingTitles.has(init.title));
+      parsed = [...parsed, ...newEssays];
+
       setEssays(parsed);
       if (parsed.length > 0) setActiveEssayId(parsed[0].id);
     } else {
@@ -119,7 +124,8 @@ export default function App() {
               try {
                   // Add cache buster to avoid cached 404s
                   const res = await fetch(`${essay.audioPath}?t=${Date.now()}`, { method: 'HEAD' });
-                  setIsLocalFileReady(res.ok);
+                  const contentType = res.headers.get('content-type');
+                  setIsLocalFileReady(res.ok && contentType !== null && !contentType.includes('text/html'));
               } catch (e) {
                   setIsLocalFileReady(false);
               }
