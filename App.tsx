@@ -79,14 +79,15 @@ export default function App() {
     if (savedEssays) {
       let parsed = JSON.parse(savedEssays);
       
-      // Update logic: Sync `audioPath` from INITIAL_ESSAYS to `savedEssays`
-      // This ensures that if the code is updated with new paths, existing users get them.
+      // Update logic: Sync `audioPath` and `grammarPoints` from INITIAL_ESSAYS to `savedEssays`
+      // This ensures that if the code is updated with new paths or grammar points, existing users get them.
       parsed = parsed.map((saved: Essay) => {
           const fresh = INITIAL_ESSAYS.find(init => init.title === saved.title);
           if (fresh) {
               return {
                   ...saved,
-                  audioPath: fresh.audioPath
+                  audioPath: fresh.audioPath,
+                  sentences: fresh.sentences
               };
           }
           return saved;
@@ -498,6 +499,39 @@ export default function App() {
     );
   };
 
+  const renderExplanationMode = () => {
+    if (!activeEssay || !activeEssay.sentences) return null;
+    
+    return (
+        <div className="space-y-6">
+            {activeEssay.sentences.map((sent, idx) => {
+                return (
+                    <div key={sent.id} className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm print:border-none print:shadow-none print:p-0 print:mb-8">
+                         <div className="flex justify-between items-center mb-2">
+                             <div className="text-gray-500 text-sm font-semibold tracking-wide uppercase">Sentence {idx + 1}</div>
+                             <button
+                                 onClick={() => playText(sent.english, () => {})}
+                                 className="text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 p-1.5 rounded-full transition-colors"
+                                 title="Play sentence"
+                             >
+                                 <PlayIcon />
+                             </button>
+                         </div>
+                         <div className="mb-3 text-lg font-medium text-gray-900">{sent.english}</div>
+                         <div className="mb-3 text-md text-gray-700">{sent.chinese}</div>
+                         {sent.grammarPoints && (
+                             <div className="mt-4 bg-emerald-50 border border-emerald-100 rounded-lg p-3">
+                                 <div className="text-sm font-semibold text-emerald-800 mb-1">关键语法点 / Key Grammar</div>
+                                 <div className="text-sm text-emerald-700 whitespace-pre-wrap">{sent.grammarPoints}</div>
+                             </div>
+                         )}
+                    </div>
+                );
+            })}
+        </div>
+    );
+  };
+
   const SidebarContent = () => (
       <>
         <div className="flex-1 overflow-y-auto p-2 space-y-1 no-scrollbar">
@@ -548,7 +582,7 @@ export default function App() {
       {/* Sidebar (Desktop) */}
       <aside className="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex print:hidden">
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-            <h1 className="font-bold text-xl text-blue-600 tracking-tight">MemoMaster AI</h1>
+            <h1 className="font-bold text-xl text-blue-600 tracking-tight">范文记忆</h1>
         </div>
         <SidebarContent />
       </aside>
@@ -561,7 +595,7 @@ export default function App() {
              <button onClick={() => setIsMobileMenuOpen(true)} className="text-gray-600 hover:text-blue-600">
                  <MenuIcon />
              </button>
-             <h1 className="font-bold text-lg text-blue-600">MemoMaster AI</h1>
+             <h1 className="font-bold text-lg text-blue-600">范文记忆</h1>
              <button onClick={() => setIsAddModalOpen(true)} className="text-blue-600">
                  <PlusIcon />
              </button>
@@ -573,7 +607,7 @@ export default function App() {
                 <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}></div>
                 <div className="relative bg-white w-64 h-full shadow-xl flex flex-col animate-in slide-in-from-left duration-200">
                     <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-                        <h1 className="font-bold text-xl text-blue-600 tracking-tight">MemoMaster AI</h1>
+                        <h1 className="font-bold text-xl text-blue-600 tracking-tight">范文记忆</h1>
                         <button onClick={() => setIsMobileMenuOpen(false)} className="text-gray-400 hover:text-gray-600">
                             <XIcon />
                         </button>
@@ -629,6 +663,12 @@ export default function App() {
                 </button>
                 <div className="w-px h-4 bg-gray-300 mx-1 flex-shrink-0"></div>
                 <button
+                    onClick={() => setMode(PracticeMode.EXPLANATION)}
+                    className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${mode === PracticeMode.EXPLANATION ? 'bg-white text-emerald-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                >
+                    逐句讲解
+                </button>
+                <button
                     onClick={() => setMode(PracticeMode.TRANSLATION)}
                     className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${mode === PracticeMode.TRANSLATION ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
                 >
@@ -640,7 +680,7 @@ export default function App() {
 
         {/* Text Area */}
         <div className="flex-1 overflow-y-auto p-2 sm:p-8 bg-gray-50 print:overflow-visible print:h-auto print:bg-white print:p-0 w-full">
-            <div className={`max-w-3xl mx-auto min-h-[50vh] ${mode !== PracticeMode.TRANSLATION ? 'bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-10 text-gray-800' : ''} print:max-w-none print:shadow-none print:border-none print:p-0`}>
+            <div className={`max-w-3xl mx-auto min-h-[50vh] ${(mode !== PracticeMode.TRANSLATION && mode !== PracticeMode.EXPLANATION) ? 'bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-10 text-gray-800' : ''} print:max-w-none print:shadow-none print:border-none print:p-0`}>
                 {activeEssay ? (
                     !activeEssay.isAnalyzed ? (
                         <div className="flex flex-col items-center justify-center h-40 text-gray-400">
@@ -650,6 +690,8 @@ export default function App() {
                     ) : (
                         mode === PracticeMode.TRANSLATION ? (
                             renderTranslationMode()
+                        ) : mode === PracticeMode.EXPLANATION ? (
+                            renderExplanationMode()
                         ) : (
                             renderEssayContent()
                         )
@@ -705,7 +747,7 @@ export default function App() {
                     <div className="w-px h-6 bg-gray-300 flex-shrink-0"></div>
 
                     {/* Check Action (Only in practice modes) */}
-                    {mode !== PracticeMode.READ && (
+                    {(mode !== PracticeMode.READ && mode !== PracticeMode.EXPLANATION) && (
                          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
                             {score !== null && (
                                 <div className={`font-bold text-lg ${score > 80 ? 'text-green-600' : 'text-orange-500'}`}>
@@ -723,6 +765,9 @@ export default function App() {
                     
                     {mode === PracticeMode.READ && (
                         <span className="text-sm text-gray-500 font-medium px-2 whitespace-nowrap">Read Mode</span>
+                    )}
+                    {mode === PracticeMode.EXPLANATION && (
+                        <span className="text-sm text-gray-500 font-medium px-2 whitespace-nowrap">Explanation Mode</span>
                     )}
 
                 </div>

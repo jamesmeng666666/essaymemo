@@ -62,16 +62,16 @@ As a gifted composer, Nie Er created over 30 songs during his life. Many of thes
 
 Sadly, Nie Er passed away at the young age of 23. However, his music has lived on. People respect him as "the People's Musician" and remember him as a beloved national hero.`,
         sentences: [
-            { english: "Nie Er, originally named Nie Shouxin, was born in Yunnan in 1912.", chinese: "聂耳，原名聂守信，1912年出生于云南。" },
-            { english: "He showed extraordinary talent in music from an early age.", chinese: "他从小就表现出非凡的音乐天赋。" },
-            { english: "He could pick up any song after hearing it just once or twice.", chinese: "任何歌曲他听一两遍就能学会。" },
-            { english: "Besides, he had a special skill of moving his ears, so people gave him the nickname \"Erduo\", which he later adopted as his formal name.", chinese: "此外，他还有一种动耳朵的特殊技能，所以人们给他起了个绰号叫“耳朵”，后来他把它作为了自己的正式名字。" },
-            { english: "As a gifted composer, Nie Er created over 30 songs during his life.", chinese: "作为一位天才作曲家，聂耳一生创作了30多首歌曲。" },
-            { english: "Many of these works showed ordinary people's suffering.", chinese: "其中许多作品展现了普通百姓的苦难。" },
-            { english: "His greatest achievement is composing the music for China's national anthem, which encouraged people to fight for the nation.", chinese: "他最大的成就是为中国国歌谱曲，激励人们为国家而战。" },
-            { english: "Sadly, Nie Er passed away at the young age of 23.", chinese: "遗憾的是，聂耳在23岁时英年早逝。" },
-            { english: "However, his music has lived on.", chinese: "然而，他的音乐却流传了下来。" },
-            { english: "People respect him as \"the People's Musician\" and remember him as a beloved national hero.", chinese: "人们尊称他为“人民音乐家”，并铭记他为受人爱戴的民族英雄。" }
+            { english: "Nie Er, originally named Nie Shouxin, was born in Yunnan in 1912.", chinese: "聂耳，原名聂守信，1912年出生于云南。", grammarPoints: "1. originally named... 过去分词短语作后置定语，意为“原名叫...”。\n2. be born in + 地点/年份，表示“出生于...”。" },
+            { english: "He showed extraordinary talent in music from an early age.", chinese: "他从小就表现出非凡的音乐天赋。", grammarPoints: "1. show talent in... 在...方面展现天赋。\n2. from an early age 从小。" },
+            { english: "He could pick up any song after hearing it just once or twice.", chinese: "任何歌曲他听一两遍就能学会。", grammarPoints: "1. pick up 学会，掌握（偶然或无意中）。\n2. after hearing... 介词after + 动名词(v.-ing)作宾语。" },
+            { english: "Besides, he had a special skill of moving his ears, so people gave him the nickname \"Erduo\", which he later adopted as his formal name.", chinese: "此外，他还有一种动耳朵的特殊技能，所以人们给他起了个绰号叫“耳朵”，后来他把它作为了自己的正式名字。", grammarPoints: "1. a skill of doing sth. 做某事的技能。\n2. give sb. the nickname... 给某人起绰号...\n3. which引导非限制性定语从句，指代前面的nickname。" },
+            { english: "As a gifted composer, Nie Er created over 30 songs during his life.", chinese: "作为一位天才作曲家，聂耳一生创作了30多首歌曲。", grammarPoints: "1. As + 身份，作为...。\n2. over = more than 超过。\n3. during his life 在他一生中。" },
+            { english: "Many of these works showed ordinary people's suffering.", chinese: "其中许多作品展现了普通百姓的苦难。", grammarPoints: "1. Many of... ...中的许多。\n2. ordinary people's 普通人的（名词所有格）。" },
+            { english: "His greatest achievement is composing the music for China's national anthem, which encouraged people to fight for the nation.", chinese: "他最大的成就是为中国国歌谱曲，激励人们为国家而战。", grammarPoints: "1. composing... 动名词作表语，解释achievement的内容。\n2. encourage sb. to do sth. 鼓励某人做某事。\n3. fight for 为...而战。" },
+            { english: "Sadly, Nie Er passed away at the young age of 23.", chinese: "遗憾的是，聂耳在23岁时英年早逝。", grammarPoints: "1. pass away 去世（委婉说法）。\n2. at the age of 在...岁时。" },
+            { english: "However, his music has lived on.", chinese: "然而，他的音乐却流传了下来。", grammarPoints: "1. live on 继续存在，流传。\n2. 现在完成时(has lived)表示过去发生的动作对现在仍有影响。" },
+            { english: "People respect him as \"the People's Musician\" and remember him as a beloved national hero.", chinese: "人们尊称他为“人民音乐家”，并铭记他为受人爱戴的民族英雄。", grammarPoints: "1. respect sb. as... 尊某人为...\n2. remember sb. as... 铭记某人为..." }
         ]
     },
     {
@@ -85,16 +85,16 @@ The good news, shown in the second graph, is that over 80% of the tourists enjoy
 
 To improve the situation, we plan to add more activity areas to reduce waiting time. Also, we will provide more detailed guidance for tourists. We believe these measures will attract and satisfy more tourists.`,
         sentences: [
-            { english: "This year, our Intangible Cultural Heritage Experience Base has attracted a large number of tourists.", chinese: "今年，我们的非物质文化遗产体验基地吸引了大量游客。" },
-            { english: "We recorded the monthly tourist numbers from January to June and conducted a tourist satisfaction survey.", chinese: "我们记录了1月至6月的月度游客人数，并进行了游客满意度调查。" },
-            { english: "According to the first graph, there were about 25,000 tourists in January and 22,000 in February.", chinese: "根据第一张图表，1月份的游客约为25,000人，2月份约为22,000人。" },
-            { english: "The number rose to 35,000 in March, fell to 22,000 in April, then peaked at 40,000 in May.", chinese: "3月份人数升至35,000人，4月份降至22,000人，然后在5月份达到40,000人的峰值。" },
-            { english: "It dropped sharply to 20,000 in June.", chinese: "6月份急剧下降至20,000人。" },
-            { english: "The good news, shown in the second graph, is that over 80% of the tourists enjoyed their experiences very much.", chinese: "第二张图表显示的好消息是，超过80%的游客非常享受他们的体验。" },
-            { english: "However, a small number of tourists were not satisfied due to the long waiting time.", chinese: "然而，由于等待时间长，少数游客表示不满意。" },
-            { english: "To improve the situation, we plan to add more activity areas to reduce waiting time.", chinese: "为了改善这种情况，我们计划增加更多的活动区域以减少等待时间。" },
-            { english: "Also, we will provide more detailed guidance for tourists.", chinese: "此外，我们将为游客提供更详细的指导。" },
-            { english: "We believe these measures will attract and satisfy more tourists.", chinese: "我们相信这些措施将吸引并满足更多的游客。" }
+            { english: "This year, our Intangible Cultural Heritage Experience Base has attracted a large number of tourists.", chinese: "今年，我们的非物质文化遗产体验基地吸引了大量游客。", grammarPoints: "1. 现在完成时(has attracted)表示过去发生的动作对现在造成的影响。\n2. a large number of + 可数名词复数，大量的..." },
+            { english: "We recorded the monthly tourist numbers from January to June and conducted a tourist satisfaction survey.", chinese: "我们记录了1月至6月的月度游客人数，并进行了游客满意度调查。", grammarPoints: "1. from... to... 从...到...\n2. conduct a survey 进行调查。" },
+            { english: "According to the first graph, there were about 25,000 tourists in January and 22,000 in February.", chinese: "根据第一张图表，1月份的游客约为25,000人，2月份约为22,000人。", grammarPoints: "1. According to 根据...\n2. there were... there be句型的过去时复数形式。" },
+            { english: "The number rose to 35,000 in March, fell to 22,000 in April, then peaked at 40,000 in May.", chinese: "3月份人数升至35,000人，4月份降至22,000人，然后在5月份达到40,000人的峰值。", grammarPoints: "1. rise to 升至（rise的过去式是rose）。\n2. fall to 降至（fall的过去式是fell）。\n3. peak at 达到峰值..." },
+            { english: "It dropped sharply to 20,000 in June.", chinese: "6月份急剧下降至20,000人。", grammarPoints: "1. drop sharply 急剧下降。\n2. in + 月份，在某月。" },
+            { english: "The good news, shown in the second graph, is that over 80% of the tourists enjoyed their experiences very much.", chinese: "第二张图表显示的好消息是，超过80%的游客非常享受他们的体验。", grammarPoints: "1. shown in... 过去分词短语作后置定语。\n2. is that... that引导表语从句。\n3. enjoy oneself/one's experience 享受...的乐趣。" },
+            { english: "However, a small number of tourists were not satisfied due to the long waiting time.", chinese: "然而，由于等待时间长，少数游客表示不满意。", grammarPoints: "1. a small number of 少量的...\n2. be satisfied (with) 对...感到满意。\n3. due to 由于，因为。" },
+            { english: "To improve the situation, we plan to add more activity areas to reduce waiting time.", chinese: "为了改善这种情况，我们计划增加更多的活动区域以减少等待时间。", grammarPoints: "1. To improve... 动词不定式作目的状语。\n2. plan to do sth. 计划做某事。\n3. add... to... 增加...到..." },
+            { english: "Also, we will provide more detailed guidance for tourists.", chinese: "此外，我们将为游客提供更详细的指导。", grammarPoints: "1. provide sth. for sb. 为某人提供某物。\n2. detailed 详细的（形容词）。" },
+            { english: "We believe these measures will attract and satisfy more tourists.", chinese: "我们相信这些措施将吸引并满足更多的游客。", grammarPoints: "1. believe (that)... 相信...（宾语从句省略了that）。\n2. attract and satisfy 并列谓语动词。" }
         ]
     },
     {
@@ -108,17 +108,17 @@ Every coin has two sides. AI also brings some negative effects. Using AI too muc
 
 In short, AI tools can help us learn better and faster, but we must use them wisely. Only in this way can we make good use of AI in our studies.`,
         sentences: [
-             { english: "Hello, everyone! I'm very glad to stand here and share my opinions of using AI in studies.", chinese: "大家好！很高兴站在这里分享我对在学习中使用人工智能的看法。" },
-             { english: "First, AI tools can help me check for mistakes and correct them.", chinese: "首先，人工智能工具可以帮我检查错误并加以改正。" },
-             { english: "Besides, they help me save time by providing information quickly.", chinese: "此外，它们能快速提供信息，帮我节省时间。" },
-             { english: "What's more, an AI tool can provide the answer to a challenging maths problem and explain how to arrive at the answer step by step.", chinese: "更重要的是，人工智能工具可以提供数学难题的答案，并一步步解释如何得出答案。" },
-             { english: "Every coin has two sides. AI also brings some negative effects.", chinese: "凡事都有两面性。人工智能也带来了一些负面影响。" },
-             { english: "Using AI too much makes me lazier than before.", chinese: "过度使用人工智能让我比以前更懒惰了。" },
-             { english: "Moreover, it is bad for improving my ability to think and solve problems.", chinese: "而且，这对提高我的思考和解决问题的能力很不利。" },
-             { english: "Worst of all, I've noticed that AI reduces my face-to-face communication with teachers and classmates.", chinese: "最糟糕的是，我发现人工智能减少了我与老师和同学的面对面交流。" },
-             { english: "All these are harmful to me in the long run.", chinese: "从长远来看，这些对我都是有害的。" },
-             { english: "In short, AI tools can help us learn better and faster, but we must use them wisely.", chinese: "总之，人工智能工具可以帮助我们更好、更快地学习，但我们必须明智地使用它们。" },
-             { english: "Only in this way can we make good use of AI in our studies.", chinese: "只有这样，我们才能在学习中利用好人工智能。" }
+             { english: "Hello, everyone! I'm very glad to stand here and share my opinions of using AI in studies.", chinese: "大家好！很高兴站在这里分享我对在学习中使用人工智能的看法。", grammarPoints: "1. be glad to do sth. 很高兴做某事。\n2. share one's opinions of... 分享关于...的看法。\n3. using AI 动名词作介词of的宾语。" },
+             { english: "First, AI tools can help me check for mistakes and correct them.", chinese: "首先，人工智能工具可以帮我检查错误并加以改正。", grammarPoints: "1. help sb. (to) do sth. 帮助某人做某事。\n2. check for 检查以寻找...\n3. correct 改正（动词）。" },
+             { english: "Besides, they help me save time by providing information quickly.", chinese: "此外，它们能快速提供信息，帮我节省时间。", grammarPoints: "1. save time 节省时间。\n2. by doing sth. 通过做某事（表示方式）。" },
+             { english: "What's more, an AI tool can provide the answer to a challenging maths problem and explain how to arrive at the answer step by step.", chinese: "更重要的是，人工智能工具可以提供数学难题的答案，并一步步解释如何得出答案。", grammarPoints: "1. What's more 更重要的是。\n2. the answer to... ...的答案。\n3. how to arrive at... 疑问词+不定式，作explain的宾语。\n4. step by step 一步一步地。" },
+             { english: "Every coin has two sides. AI also brings some negative effects.", chinese: "凡事都有两面性。人工智能也带来了一些负面影响。", grammarPoints: "1. Every coin has two sides. 谚语：凡事都有两面性。\n2. bring effects 带来影响。\n3. negative 负面的。" },
+             { english: "Using AI too much makes me lazier than before.", chinese: "过度使用人工智能让我比以前更懒惰了。", grammarPoints: "1. Using AI too much 动名词短语作主语。\n2. make sb. + adj. 使某人处于某种状态。\n3. lazier 比较级，比以前更懒。" },
+             { english: "Moreover, it is bad for improving my ability to think and solve problems.", chinese: "而且，这对提高我的思考和解决问题的能力很不利。", grammarPoints: "1. be bad for 对...有害/不利。\n2. ability to do sth. 做某事的能力。" },
+             { english: "Worst of all, I've noticed that AI reduces my face-to-face communication with teachers and classmates.", chinese: "最糟糕的是，我发现人工智能减少了我与老师和同学的面对面交流。", grammarPoints: "1. Worst of all 最糟糕的是。\n2. notice that... 注意到...（宾语从句）。\n3. face-to-face 面对面的（复合形容词）。" },
+             { english: "All these are harmful to me in the long run.", chinese: "从长远来看，这些对我都是有害的。", grammarPoints: "1. be harmful to 对...有害。\n2. in the long run 从长远来看。" },
+             { english: "In short, AI tools can help us learn better and faster, but we must use them wisely.", chinese: "总之，人工智能工具可以帮助我们更好、更快地学习，但我们必须明智地使用它们。", grammarPoints: "1. In short 总之。\n2. learn better and faster 比较级并列。\n3. wisely 明智地（副词修饰动词use）。" },
+             { english: "Only in this way can we make good use of AI in our studies.", chinese: "只有这样，我们才能在学习中利用好人工智能。", grammarPoints: "1. Only in this way 位于句首，句子需要部分倒装 (can we...)。\n2. make good use of 好好利用..." }
         ]
     },
     {
@@ -132,17 +132,17 @@ However, it has some disadvantages. Elderly people and those who are unfamiliar 
 
 In short, despite its drawbacks, mobile payment is really a useful invention. We should learn to use it wisely.`,
         sentences: [
-            { english: "Mobile payment is one of the most wonderful inventions, which has totally changed how people manage money in daily life.", chinese: "移动支付是最奇妙的发明之一，它彻底改变了人们在日常生活中管理金钱的方式。" },
-            { english: "It brings great convenience to us.", chinese: "它给我们带来了极大的便利。" },
-            { english: "We no longer need to carry heavy wallets or bank cards.", chinese: "我们不再需要携带厚重的钱包或银行卡。" },
-            { english: "Besides, it helps us save time by scanning a QR code to pay quickly.", chinese: "此外，通过扫描二维码快速支付，它帮助我们节省了时间。" },
-            { english: "What's more, all payment records are stored in the app automatically, making it easier to keep track of our spending.", chinese: "更重要的是，所有支付记录都会自动存储在应用程序中，使我们更容易追踪开支。" },
-            { english: "However, it has some disadvantages.", chinese: "然而，它也有一些缺点。" },
-            { english: "Elderly people and those who are unfamiliar with smartphones find it difficult to use.", chinese: "老年人和不熟悉智能手机的人觉得使用起来很困难。" },
-            { english: "Also, poor network may cause payment failures and trouble.", chinese: "此外，糟糕的网络可能会导致支付失败和麻烦。" },
-            { english: "In addition, it might lead to overspending because people might spend less carefully and buy unnecessary things.", chinese: "另外，它可能会导致过度消费，因为人们可能会花钱不那么谨慎，购买不必要的东西。" },
-            { english: "In short, despite its drawbacks, mobile payment is really a useful invention.", chinese: "总之，尽管有缺点，移动支付确实是一项有用的发明。" },
-            { english: "We should learn to use it wisely.", chinese: "我们应该学会明智地使用它。" }
+            { english: "Mobile payment is one of the most wonderful inventions, which has totally changed how people manage money in daily life.", chinese: "移动支付是最奇妙的发明之一，它彻底改变了人们在日常生活中管理金钱的方式。", grammarPoints: "1. one of the most wonderful inventions 最奇妙的发明之一（one of + 形容词最高级 + 名词复数）。\n2. which引导非限制性定语从句，指代前面的inventions。\n3. how引导宾语从句。" },
+            { english: "It brings great convenience to us.", chinese: "它给我们带来了极大的便利。", grammarPoints: "1. bring sth. to sb. 给某人带来某物。\n2. convenience 便利（名词）。" },
+            { english: "We no longer need to carry heavy wallets or bank cards.", chinese: "我们不再需要携带厚重的钱包或银行卡。", grammarPoints: "1. no longer 不再。\n2. need to do sth. 需要做某事。" },
+            { english: "Besides, it helps us save time by scanning a QR code to pay quickly.", chinese: "此外，通过扫描二维码快速支付，它帮助我们节省了时间。", grammarPoints: "1. help sb. (to) do sth. 帮助某人做某事。\n2. by scanning... 通过扫描...（by + 动名词表示方式）。" },
+            { english: "What's more, all payment records are stored in the app automatically, making it easier to keep track of our spending.", chinese: "更重要的是，所有支付记录都会自动存储在应用程序中，使我们更容易追踪开支。", grammarPoints: "1. are stored 一般现在时的被动语态。\n2. making it easier... 现在分词短语作结果状语。\n3. keep track of 记录，追踪。" },
+            { english: "However, it has some disadvantages.", chinese: "然而，它也有一些缺点。", grammarPoints: "1. However 然而（副词，常用于句首，用逗号隔开）。\n2. disadvantage 缺点，劣势。" },
+            { english: "Elderly people and those who are unfamiliar with smartphones find it difficult to use.", chinese: "老年人和不熟悉智能手机的人觉得使用起来很困难。", grammarPoints: "1. those who... 那些...的人（who引导定语从句）。\n2. be unfamiliar with 对...不熟悉。\n3. find it difficult to use 发现做某事很困难（it作形式宾语）。" },
+            { english: "Also, poor network may cause payment failures and trouble.", chinese: "此外，糟糕的网络可能会导致支付失败和麻烦。", grammarPoints: "1. cause 导致，引起。\n2. failure 失败（名词）。" },
+            { english: "In addition, it might lead to overspending because people might spend less carefully and buy unnecessary things.", chinese: "另外，它可能会导致过度消费，因为人们可能会花钱不那么谨慎，购买不必要的东西。", grammarPoints: "1. In addition 另外，此外。\n2. lead to 导致（to是介词）。\n3. overspending 过度消费（动名词）。\n4. less carefully 不那么谨慎地（比较级）。" },
+            { english: "In short, despite its drawbacks, mobile payment is really a useful invention.", chinese: "总之，尽管有缺点，移动支付确实是一项有用的发明。", grammarPoints: "1. In short 总之。\n2. despite 尽管（介词，后接名词或代词）。\n3. drawback 缺点。" },
+            { english: "We should learn to use it wisely.", chinese: "我们应该学会明智地使用它。", grammarPoints: "1. learn to do sth. 学会做某事。\n2. wisely 明智地（副词）。" }
         ]
     },
     {
@@ -161,18 +161,18 @@ Thank you again for your kindness and support! I do hope that we can stay in tou
 Best wishes,
 Peter`,
         sentences: [
-            { english: "I hope you are doing well.", chinese: "希望你们一切安好。" },
-            { english: "I'm writing to express my thanks to you for everything you have done during my stay in Shenzhen.", chinese: "我写这封信是为了感谢你们在我逗留深圳期间所做的一切。" },
-            { english: "It was so kind of you to make me feel at home.", chinese: "你们让我感觉像在家里一样，真是太好了。" },
-            { english: "When I arrived in Shenzhen, everything was unfamiliar to me.", chinese: "当我到达深圳时，一切对我来说都很陌生。" },
-            { english: "However, you have given me a lot of care and taught me some Chinese.", chinese: "然而，你们给了我很多关照，还教了我一些中文。" },
-            { english: "Thanks to your help, I have adapted to the digital life so quickly, from using mobile payment to riding shared bikes.", chinese: "多亏了你们的帮助，我很快适应了数字生活，从使用移动支付到骑共享单车。" },
-            { english: "What's more, it was fantastic to learn about traditional culture with you.", chinese: "更棒的是，能和你们一起学习传统文化真是太好了。" },
-            { english: "I especially enjoyed watching the lion dance during the Spring Festival.", chinese: "我特别喜欢春节期间看舞狮。" },
-            { english: "Making dumplings together has become another highlight that helped me understand Chinese traditions better.", chinese: "一起包饺子成了另一个亮点，帮助我更好地了解中国传统。" },
-            { english: "Thank you again for your kindness and support!", chinese: "再次感谢你们的善意和支持！" },
-            { english: "I do hope that we can stay in touch all the time.", chinese: "我真心希望我们能一直保持联系。" },
-            { english: "Welcome to the UK someday!", chinese: "欢迎有一天来英国！" }
+            { english: "I hope you are doing well.", chinese: "希望你们一切安好。", grammarPoints: "1. hope (that)... 希望...（宾语从句）。\n2. doing well 进展顺利，身体健康。" },
+            { english: "I'm writing to express my thanks to you for everything you have done during my stay in Shenzhen.", chinese: "我写这封信是为了感谢你们在我逗留深圳期间所做的一切。", grammarPoints: "1. write to do sth. 写信做某事。\n2. express one's thanks to sb. for sth. 因某事向某人表达感谢。\n3. you have done 定语从句，修饰everything。" },
+            { english: "It was so kind of you to make me feel at home.", chinese: "你们让我感觉像在家里一样，真是太好了。", grammarPoints: "1. It is kind of sb. to do sth. 某人做某事真是太好了。\n2. make sb. do sth. 使某人做某事（省略to的不定式作宾补）。\n3. feel at home 感觉像在家里一样，感到自在。" },
+            { english: "When I arrived in Shenzhen, everything was unfamiliar to me.", chinese: "当我到达深圳时，一切对我来说都很陌生。", grammarPoints: "1. arrive in + 大地方，到达...。\n2. be unfamiliar to sb. 对某人来说很陌生。" },
+            { english: "However, you have given me a lot of care and taught me some Chinese.", chinese: "然而，你们给了我很多关照，还教了我一些中文。", grammarPoints: "1. give sb. sth. 给某人某物。\n2. teach sb. sth. 教某人某物。\n3. have given / taught 现在完成时。" },
+            { english: "Thanks to your help, I have adapted to the digital life so quickly, from using mobile payment to riding shared bikes.", chinese: "多亏了你们的帮助，我很快适应了数字生活，从使用移动支付到骑共享单车。", grammarPoints: "1. Thanks to 多亏了，由于。\n2. adapt to 适应...（to是介词）。\n3. from... to... 从...到...（连接两个动名词短语）。" },
+            { english: "What's more, it was fantastic to learn about traditional culture with you.", chinese: "更棒的是，能和你们一起学习传统文化真是太好了。", grammarPoints: "1. What's more 更重要的是，而且。\n2. It is + adj. + to do sth. 做某事是...的（it作形式主语）。\n3. learn about 了解，学习关于..." },
+            { english: "I especially enjoyed watching the lion dance during the Spring Festival.", chinese: "我特别喜欢春节期间看舞狮。", grammarPoints: "1. enjoy doing sth. 喜欢做某事。\n2. during the Spring Festival 在春节期间。" },
+            { english: "Making dumplings together has become another highlight that helped me understand Chinese traditions better.", chinese: "一起包饺子成了另一个亮点，帮助我更好地了解中国传统。", grammarPoints: "1. Making dumplings 动名词短语作主语。\n2. that helped... that引导定语从句，修饰highlight。\n3. help sb. (to) do sth. 帮助某人做某事。" },
+            { english: "Thank you again for your kindness and support!", chinese: "再次感谢你们的善意和支持！", grammarPoints: "1. Thank you for... 感谢你的...\n2. kindness 善良，善意（名词）。" },
+            { english: "I do hope that we can stay in touch all the time.", chinese: "我真心希望我们能一直保持联系。", grammarPoints: "1. do hope 助动词do表强调，“确实，真心”。\n2. stay in touch 保持联系。\n3. all the time 一直，始终。" },
+            { english: "Welcome to the UK someday!", chinese: "欢迎有一天来英国！", grammarPoints: "1. Welcome to + 地点，欢迎来到...。\n2. someday （将来的）某一天。" }
         ]
     },
     {
@@ -186,16 +186,16 @@ Everyone in the city felt very scared, but Zhuge Liang stayed calm. He came up w
 
 This story tells us that we should think wisely when we are in trouble because nothing is more powerful than wisdom.`,
         sentences: [
-            { english: "Good morning, everyone! Welcome to Wisdom Today.", chinese: "大家早上好！欢迎来到《智慧今日》。" },
-            { english: "I'm going to share the story of Zhuge Liang's Empty City Plan with you.", chinese: "我要和大家分享诸葛亮空城计的故事。" },
-            { english: "During the Three Kingdoms Period, Zhuge Liang was a smart general of Shu.", chinese: "三国时期，诸葛亮是蜀国的一位聪明将领。" },
-            { english: "One day, most of his soldiers went out to fight while only a few old and weak soldiers were left.", chinese: "有一天，他的大部分士兵都出去打仗了，只剩下一些老弱残兵。" },
-            { english: "Suddenly, Sima Yi's large army came to attack it.", chinese: "突然，司马懿的大军来攻城。" },
-            { english: "Everyone in the city felt very scared, but Zhuge Liang stayed calm.", chinese: "城里的每个人都很害怕，但诸葛亮保持镇定。" },
-            { english: "He came up with a brilliant idea that he ordered soldiers to open the city gates and let some of them pretend to sweep the streets slowly.", chinese: "他想出了一个绝妙的主意，命令士兵打开城门，让其中一些人假装在慢慢扫街。" },
-            { english: "Meanwhile, he sat on the city wall, playing the zither with a peaceful smile.", chinese: "与此同时，他坐在城墙上，带着平静的微笑弹琴。" },
-            { english: "Sima Yi thought there was an ambush, so he marched his army away.", chinese: "司马懿以为有埋伏，就把军队撤走了。" },
-            { english: "This story tells us that we should think wisely when we are in trouble because nothing is more powerful than wisdom.", chinese: "这个故事告诉我们，遇到困难要运用智慧，因为没有什么比智慧更强大。" }
+            { english: "Good morning, everyone! Welcome to Wisdom Today.", chinese: "大家早上好！欢迎来到《智慧今日》。", grammarPoints: "1. Welcome to... 欢迎来到...。" },
+            { english: "I'm going to share the story of Zhuge Liang's Empty City Plan with you.", chinese: "我要和大家分享诸葛亮空城计的故事。", grammarPoints: "1. be going to do sth. 打算/将要做某事。\n2. share sth. with sb. 和某人分享某物。" },
+            { english: "During the Three Kingdoms Period, Zhuge Liang was a smart general of Shu.", chinese: "三国时期，诸葛亮是蜀国的一位聪明将领。", grammarPoints: "1. During 在...期间。\n2. general 将军，将领。" },
+            { english: "One day, most of his soldiers went out to fight while only a few old and weak soldiers were left.", chinese: "有一天，他的大部分士兵都出去打仗了，只剩下一些老弱残兵。", grammarPoints: "1. go out to do sth. 出去做某事。\n2. while 然而，当...时候（表对比或同时）。\n3. were left 被留下（一般过去时的被动语态）。" },
+            { english: "Suddenly, Sima Yi's large army came to attack it.", chinese: "突然，司马懿的大军来攻城。", grammarPoints: "1. Suddenly 突然（副词）。\n2. come to do sth. 来做某事。" },
+            { english: "Everyone in the city felt very scared, but Zhuge Liang stayed calm.", chinese: "城里的每个人都很害怕，但诸葛亮保持镇定。", grammarPoints: "1. feel scared 感到害怕（系表结构）。\n2. stay calm 保持镇定（stay作连系动词）。" },
+            { english: "He came up with a brilliant idea that he ordered soldiers to open the city gates and let some of them pretend to sweep the streets slowly.", chinese: "他想出了一个绝妙的主意，命令士兵打开城门，让其中一些人假装在慢慢扫街。", grammarPoints: "1. come up with 想出，提出。\n2. order sb. to do sth. 命令某人做某事。\n3. let sb. do sth. 让某人做某事。\n4. pretend to do sth. 假装做某事。" },
+            { english: "Meanwhile, he sat on the city wall, playing the zither with a peaceful smile.", chinese: "与此同时，他坐在城墙上，带着平静的微笑弹琴。", grammarPoints: "1. Meanwhile 与此同时。\n2. playing the zither 现在分词短语作伴随状语。\n3. with a peaceful smile 带着平静的微笑（with表伴随）。" },
+            { english: "Sima Yi thought there was an ambush, so he marched his army away.", chinese: "司马懿以为有埋伏，就把军队撤走了。", grammarPoints: "1. thought (that)... 以为...（宾语从句）。\n2. march... away 把...撤走，使...行军离开。" },
+            { english: "This story tells us that we should think wisely when we are in trouble because nothing is more powerful than wisdom.", chinese: "这个故事告诉我们，遇到困难要运用智慧，因为没有什么比智慧更强大。", grammarPoints: "1. tell sb. that... 告诉某人...（宾语从句）。\n2. be in trouble 处于困境中。\n3. nothing is more powerful than... 没有什么比...更强大（比较级表最高级含义）。" }
         ]
     },
     {
@@ -209,19 +209,19 @@ Spaced repetition can play an important role in our studies. It can not only hel
 
 So, let's give spaced repetition a try! I'm sure it will help us achieve our learning goals.`,
         sentences: [
-            { english: "Hi, everyone! Today, I'd like to share a useful memory technique - spaced repetition.", chinese: "大家好！今天，我想分享一种有用的记忆技巧——间隔重复。" },
-            { english: "When we learn something new, like English words, we often tend to forget them quickly.", chinese: "当我们学习新东西时，比如英语单词，我们往往忘得很快。" },
-            { english: "Spaced repetition can help us.", chinese: "间隔重复可以帮助我们。" },
-            { english: "The key is to review the information at right intervals.", chinese: "关键是在适当的间隔复习信息。" },
-            { english: "First, review the information on the same day we learn it.", chinese: "首先，在学习当天的同一天复习信息。" },
-            { english: "Then check it again after 24 hours.", chinese: "然后在24小时后再次查看。" },
-            { english: "A week later, make a point of going over it once more.", chinese: "一周后，务必再复习一遍。" },
-            { english: "And finally, review it after 30 days.", chinese: "最后，在30天后复习。" },
-            { english: "This process helps move knowledge from our short-term memory to long-term memory.", chinese: "这个过程有助于将知识从短期记忆转移到长期记忆。" },
-            { english: "Spaced repetition can play an important role in our studies.", chinese: "间隔重复可以在我们的学习中发挥重要作用。" },
-            { english: "It can not only help us save time by reviewing the things we need to remember regularly, but also build our confidence because a good memory will make us feel proud.", chinese: "它不仅可以通过定期复习我们需要记住的东西来帮助我们节省时间，还能建立我们的自信，因为好的记忆力会让我们感到自豪。" },
-            { english: "So, let's give spaced repetition a try!", chinese: "所以，让我们试试间隔重复法吧！" },
-            { english: "I'm sure it will help us achieve our learning goals.", chinese: "我相信它会帮助我们实现学习目标。" }
+            { english: "Hi, everyone! Today, I'd like to share a useful memory technique - spaced repetition.", chinese: "大家好！今天，我想分享一种有用的记忆技巧——间隔重复。", grammarPoints: "1. would like to do sth. 想要做某事。\n2. technique 技巧，技术。" },
+            { english: "When we learn something new, like English words, we often tend to forget them quickly.", chinese: "当我们学习新东西时，比如英语单词，我们往往忘得很快。", grammarPoints: "1. something new 形容词修饰不定代词要后置。\n2. tend to do sth. 倾向于做某事，往往会做某事。" },
+            { english: "Spaced repetition can help us.", chinese: "间隔重复可以帮助我们。", grammarPoints: "1. spaced repetition 间隔重复。" },
+            { english: "The key is to review the information at right intervals.", chinese: "关键是在适当的间隔复习信息。", grammarPoints: "1. The key is to do sth. 关键是做某事（不定式作表语）。\n2. at right intervals 在适当的间隔。" },
+            { english: "First, review the information on the same day we learn it.", chinese: "首先，在学习当天的同一天复习信息。", grammarPoints: "1. review 复习（动词原形开头，祈使句）。\n2. on the same day 在同一天（具体某一天用介词on）。" },
+            { english: "Then check it again after 24 hours.", chinese: "然后在24小时后再次查看。", grammarPoints: "1. after + 时间段，在...之后。" },
+            { english: "A week later, make a point of going over it once more.", chinese: "一周后，务必再复习一遍。", grammarPoints: "1. make a point of doing sth. 务必做某事，特别注意做某事。\n2. go over 复习，回顾。\n3. once more 再一次。" },
+            { english: "And finally, review it after 30 days.", chinese: "最后，在30天后复习。", grammarPoints: "1. finally 最后（副词）。" },
+            { english: "This process helps move knowledge from our short-term memory to long-term memory.", chinese: "这个过程有助于将知识从短期记忆转移到长期记忆。", grammarPoints: "1. help (to) do sth. 帮助做某事。\n2. move... from... to... 把...从...转移到..." },
+            { english: "Spaced repetition can play an important role in our studies.", chinese: "间隔重复可以在我们的学习中发挥重要作用。", grammarPoints: "1. play an important role in... 在...中发挥重要作用。" },
+            { english: "It can not only help us save time by reviewing the things we need to remember regularly, but also build our confidence because a good memory will make us feel proud.", chinese: "它不仅可以通过定期复习我们需要记住的东西来帮助我们节省时间，还能建立我们的自信，因为好的记忆力会让我们感到自豪。", grammarPoints: "1. not only... but also... 不仅...而且...（连接并列结构）。\n2. the things we need to remember 定语从句修饰things。\n3. make sb. feel proud 使某人感到自豪。" },
+            { english: "So, let's give spaced repetition a try!", chinese: "所以，让我们试试间隔重复法吧！", grammarPoints: "1. let's do sth. 让我们做某事。\n2. give sth. a try 尝试某事。" },
+            { english: "I'm sure it will help us achieve our learning goals.", chinese: "我相信它会帮助我们实现学习目标。", grammarPoints: "1. be sure (that)... 确信...（宾语从句）。\n2. achieve goals 实现目标。" }
         ]
     },
     {
@@ -235,20 +235,20 @@ However, keeping pets also has its downsides. Pets can be noisy at night, which 
 
 In my opinion, keeping pets is a good idea if we can take proper care of them. We should make sure they are clean, healthy, and well-trained. By this way, pets can bring us joy without causing trouble to others.`,
         sentences: [
-            { english: "Recently, more and more young people like to keep pets.", chinese: "最近，越来越多的年轻人喜欢养宠物。" },
-            { english: "Some of them think their pets are part of the family.", chinese: "他们中的一些人认为宠物是家庭的一部分。" },
-            { english: "People keep pets mainly because they are lovely and can bring happiness.", chinese: "人们养宠物主要是因为它们可爱，能带来快乐。" },
-            { english: "Pets are good companions, especially for the elderly and children, helping them feel less lonely.", chinese: "宠物是很好的伴侣，特别是对于老人和孩子，帮助他们减少孤独感。" },
-            { english: "Playing with pets after school or work can help us relax.", chinese: "放学或下班后和宠物一起玩可以帮助我们放松。" },
-            { english: "Moreover, taking care of pets teaches us responsibility and how to care for others.", chinese: "此外，照顾宠物教会我们责任感以及如何关心他人。" },
-            { english: "However, keeping pets also has its downsides.", chinese: "然而，养宠物也有其缺点。" },
-            { english: "Pets can be noisy at night, which may disturb neighbors.", chinese: "宠物在晚上可能会很吵，这可能会打扰邻居。" },
-            { english: "Some pets might even attack people.", chinese: "有些宠物甚至可能攻击人。" },
-            { english: "Besides, they need to be cleaned often, and their waste can cause environmental problems.", chinese: "此外，它们需要经常清洁，它们的排泄物可能会引起环境问题。" },
-            { english: "The cost of food and medical care for pets can also be high.", chinese: "宠物的食物和医疗费用也可能很高。" },
-            { english: "In my opinion, keeping pets is a good idea if we can take proper care of them.", chinese: "在我看来，如果我们能妥善照顾它们，养宠物是个好主意。" },
-            { english: "We should make sure they are clean, healthy, and well-trained.", chinese: "我们应该确保它们干净、健康并且训练有素。" },
-            { english: "By this way, pets can bring us joy without causing trouble to others.", chinese: "通过这种方式，宠物可以给我们带来快乐，而不会给别人带来麻烦。" }
+            { english: "Recently, more and more young people like to keep pets.", chinese: "最近，越来越多的年轻人喜欢养宠物。", grammarPoints: "1. Recently 最近（常与现在完成时或一般现在时连用）。\n2. more and more 越来越...（比较级 and 比较级）。\n3. keep pets 养宠物。" },
+            { english: "Some of them think their pets are part of the family.", chinese: "他们中的一些人认为宠物是家庭的一部分。", grammarPoints: "1. think (that)... 认为...（宾语从句）。\n2. part of... ...的一部分。" },
+            { english: "People keep pets mainly because they are lovely and can bring happiness.", chinese: "人们养宠物主要是因为它们可爱，能带来快乐。", grammarPoints: "1. mainly because 主要是因为（引导原因状语从句）。\n2. lovely 可爱的（形容词，不是副词）。" },
+            { english: "Pets are good companions, especially for the elderly and children, helping them feel less lonely.", chinese: "宠物是很好的伴侣，特别是对于老人和孩子，帮助他们减少孤独感。", grammarPoints: "1. especially 特别是。\n2. the elderly 老年人（the + 形容词表示一类人）。\n3. helping them... 现在分词短语作伴随状语。\n4. feel less lonely 感觉没那么孤独。" },
+            { english: "Playing with pets after school or work can help us relax.", chinese: "放学或下班后和宠物一起玩可以帮助我们放松。", grammarPoints: "1. Playing with pets 动名词短语作主语。\n2. help sb. (to) relax 帮助某人放松。" },
+            { english: "Moreover, taking care of pets teaches us responsibility and how to care for others.", chinese: "此外，照顾宠物教会我们责任感以及如何关心他人。", grammarPoints: "1. Moreover 此外，而且。\n2. taking care of pets 动名词短语作主语。\n3. teach sb. sth. 教某人某事。\n4. how to care for... 疑问词+不定式作宾语。" },
+            { english: "However, keeping pets also has its downsides.", chinese: "然而，养宠物也有其缺点。", grammarPoints: "1. downside 缺点，负面。" },
+            { english: "Pets can be noisy at night, which may disturb neighbors.", chinese: "宠物在晚上可能会很吵，这可能会打扰邻居。", grammarPoints: "1. be noisy 吵闹的。\n2. which引导非限制性定语从句，指代前面整个句子。\n3. disturb 打扰。" },
+            { english: "Some pets might even attack people.", chinese: "有些宠物甚至可能攻击人。", grammarPoints: "1. might 可能（表示推测）。\n2. attack 攻击。" },
+            { english: "Besides, they need to be cleaned often, and their waste can cause environmental problems.", chinese: "此外，它们需要经常清洁，它们的排泄物可能会引起环境问题。", grammarPoints: "1. need to be cleaned 需要被清洁（含有被动语态的不定式）。\n2. cause 引起，导致。" },
+            { english: "The cost of food and medical care for pets can also be high.", chinese: "宠物的食物和医疗费用也可能很高。", grammarPoints: "1. The cost of... ...的费用。\n2. medical care 医疗护理。" },
+            { english: "In my opinion, keeping pets is a good idea if we can take proper care of them.", chinese: "在我看来，如果我们能妥善照顾它们，养宠物是个好主意。", grammarPoints: "1. In my opinion 在我看来。\n2. if引导条件状语从句。\n3. take proper care of... 妥善照顾..." },
+            { english: "We should make sure they are clean, healthy, and well-trained.", chinese: "我们应该确保它们干净、健康并且训练有素。", grammarPoints: "1. make sure (that)... 确保...（宾语从句）。\n2. well-trained 训练有素的（复合形容词）。" },
+            { english: "By this way, pets can bring us joy without causing trouble to others.", chinese: "通过这种方式，宠物可以给我们带来快乐，而不会给别人带来麻烦。", grammarPoints: "1. By this way 通过这种方式。\n2. bring sb. joy 给某人带来快乐。\n3. without doing sth. 没有做某事，而不...（介词后接动名词）。\n4. cause trouble to sb. 给某人惹麻烦。" }
         ]
     },
     {
@@ -269,19 +269,19 @@ We look forward to your reply.
 Yours sincerely,
 Li Hua`,
         sentences: [
-            { english: "Dear Mr Smith,", chinese: "亲爱的史密斯先生，" },
-            { english: "I am writing to you about my plan to start a voluntary activity called \"Digital Life Buddy\".", chinese: "我写信给您是关于我计划开展一项名为“数字生活伙伴”的志愿活动。" },
-            { english: "I've found that many elderly foreign residents in our community have difficulty using Chinese digital services like WeChat Pay, Didi, and hospital booking apps.", chinese: "我发现我们社区的许多外国老年居民在使用微信支付、滴滴和医院预约等中国数字服务时遇到困难。" },
-            { english: "My classmates and I are willing to help.", chinese: "我和我的同学很乐意帮忙。" },
-            { english: "In order to help them, we'll devote our spare time to offering one-to-one guidance.", chinese: "为了帮助他们，我们将利用业余时间提供一对一的指导。" },
-            { english: "For instance, we'll teach them how to use these apps as well as solve their daily digital problems.", chinese: "例如，我们将教他们如何使用这些应用程序，并解决他们日常的数字问题。" },
-            { english: "Moreover, we'll prepare some notes in both English and Chinese to avoid confusion.", chinese: "此外，我们将准备中英文双语笔记以避免混淆。" },
-            { english: "We hope to hold this activity on Sunday at the community hall.", chinese: "我们希望周日在社区大厅举行这项活动。" },
-            { english: "Could you please give us permission to organize it?", chinese: "您能批准我们组织这项活动吗？" },
-            { english: "Thank you for your support!", chinese: "感谢您的支持！" },
-            { english: "We look forward to your reply.", chinese: "期待您的回复。" },
-            { english: "Yours sincerely,", chinese: "您真诚的，" },
-            { english: "Li Hua", chinese: "李华" }
+            { english: "Dear Mr Smith,", chinese: "亲爱的史密斯先生，", grammarPoints: "1. 英文信件的称呼语，通常用Dear开头，后接称谓和姓氏。" },
+            { english: "I am writing to you about my plan to start a voluntary activity called \"Digital Life Buddy\".", chinese: "我写信给您是关于我计划开展一项名为“数字生活伙伴”的志愿活动。", grammarPoints: "1. write to sb. about sth. 写信给某人关于某事。\n2. plan to do sth. 计划做某事。\n3. called... 过去分词短语作后置定语，意为“被称为...的”。" },
+            { english: "I've found that many elderly foreign residents in our community have difficulty using Chinese digital services like WeChat Pay, Didi, and hospital booking apps.", chinese: "我发现我们社区的许多外国老年居民在使用微信支付、滴滴和医院预约等中国数字服务时遇到困难。", grammarPoints: "1. find that... 发现...（宾语从句）。\n2. have difficulty (in) doing sth. 做某事有困难。\n3. like 像...一样，例如（介词）。" },
+            { english: "My classmates and I are willing to help.", chinese: "我和我的同学很乐意帮忙。", grammarPoints: "1. be willing to do sth. 乐意做某事。" },
+            { english: "In order to help them, we'll devote our spare time to offering one-to-one guidance.", chinese: "为了帮助他们，我们将利用业余时间提供一对一的指导。", grammarPoints: "1. In order to do sth. 为了做某事（表目的）。\n2. devote... to doing sth. 把...奉献给做某事（to是介词）。\n3. one-to-one 一对一的。" },
+            { english: "For instance, we'll teach them how to use these apps as well as solve their daily digital problems.", chinese: "例如，我们将教他们如何使用这些应用程序，并解决他们日常的数字问题。", grammarPoints: "1. For instance 例如。\n2. how to use 疑问词+不定式。\n3. as well as 以及，也（连接并列成分）。" },
+            { english: "Moreover, we'll prepare some notes in both English and Chinese to avoid confusion.", chinese: "此外，我们将准备中英文双语笔记以避免混淆。", grammarPoints: "1. in English and Chinese 用中英文（in表示用某种语言）。\n2. to avoid... 动词不定式作目的状语。" },
+            { english: "We hope to hold this activity on Sunday at the community hall.", chinese: "我们希望周日在社区大厅举行这项活动。", grammarPoints: "1. hope to do sth. 希望做某事。\n2. on Sunday 在周日（具体某一天用on）。\n3. at the community hall 在社区大厅（小地点用at）。" },
+            { english: "Could you please give us permission to organize it?", chinese: "您能批准我们组织这项活动吗？", grammarPoints: "1. Could you please do sth.? 请你做某事好吗？（委婉请求）。\n2. give sb. permission to do sth. 允许某人做某事。" },
+            { english: "Thank you for your support!", chinese: "感谢您的支持！", grammarPoints: "1. Thank you for... 感谢你的...。" },
+            { english: "We look forward to your reply.", chinese: "期待您的回复。", grammarPoints: "1. look forward to 期待（to是介词，后接名词、代词或动名词）。" },
+            { english: "Yours sincerely,", chinese: "您真诚的，", grammarPoints: "1. 英文信件的结尾敬语，常用于知道收信人姓名的情况。" },
+            { english: "Li Hua", chinese: "李华", grammarPoints: "1. 写信人签名。" }
         ]
     }
 ];

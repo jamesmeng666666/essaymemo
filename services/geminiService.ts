@@ -84,7 +84,8 @@ export const analyzeTextForTranslation = async (text: string): Promise<Sentence[
     const prompt = `
       Split the following English text into individual sentences. 
       For each sentence, provide a natural Chinese translation.
-      Return a JSON array where each object has "english" and "chinese".
+      Also provide key grammar points (in Chinese) to help 8th-grade students remember the sentence.
+      Return a JSON array where each object has "english", "chinese", and "grammarPoints".
       
       Text to process:
       """${text}"""
@@ -102,9 +103,10 @@ export const analyzeTextForTranslation = async (text: string): Promise<Sentence[
                         type: Type.OBJECT,
                         properties: {
                             english: { type: Type.STRING },
-                            chinese: { type: Type.STRING }
+                            chinese: { type: Type.STRING },
+                            grammarPoints: { type: Type.STRING }
                         },
-                        required: ['english', 'chinese']
+                        required: ['english', 'chinese', 'grammarPoints']
                     }
                 }
             }
@@ -114,7 +116,8 @@ export const analyzeTextForTranslation = async (text: string): Promise<Sentence[
         return data.map((item: any, idx: number) => ({
             id: `sent-${idx}-${Date.now()}`,
             english: item.english,
-            chinese: item.chinese
+            chinese: item.chinese,
+            grammarPoints: item.grammarPoints
         }));
 
     } catch (error) {
