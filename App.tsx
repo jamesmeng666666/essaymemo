@@ -98,6 +98,9 @@ export default function App() {
       const newEssays = INITIAL_ESSAYS.filter(init => !existingTitles.has(init.title));
       parsed = [...parsed, ...newEssays];
 
+      // Remove the old duplicate essay without the prefix
+      parsed = parsed.filter((e: Essay) => e.title !== "Body Language: Making a Fist");
+
       setEssays(parsed);
       if (parsed.length > 0) setActiveEssayId(parsed[0].id);
     } else {

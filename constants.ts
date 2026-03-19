@@ -283,6 +283,22 @@ Li Hua`,
             { english: "Yours sincerely,", chinese: "您真诚的，", grammarPoints: "1. 英文信件的结尾敬语，常用于知道收信人姓名的情况。" },
             { english: "Li Hua", chinese: "李华", grammarPoints: "1. 写信人签名。" }
         ]
+    },
+    {
+        title: "8BU2: Body Language: Making a Fist",
+        audioPath: "/audio/making_a_fist.wav",
+        content: `Hello, everyone! Today I'd like to share my thoughts on a common kind of body language: making a fist.\n\nTo begin with, a fist often shows encouragement. For example, when we see a classmate struggling with a difficult Math problem, we can make a fist in front of our chest and shake it gently. It is a silent way to cheer others up and make them feel supported.\n\nHowever, we should also be careful with this gesture. A clenched fist can easily express anger, impatience or even danger. If someone is extremely angry, they may use this gesture as a warning, which makes others feel scared and uncomfortable.\n\nIn conclusion, understanding the different meanings of a simple gesture like a fist can help us improve our communication.\n\nThank you for listening!`,
+        sentences: [
+            { english: "Hello, everyone! Today I'd like to share my thoughts on a common kind of body language: making a fist.", chinese: "大家好！今天我想分享一下我对一种常见肢体语言的看法：握拳。", grammarPoints: "1. would like to do sth. 想要做某事。\n2. share one's thoughts on... 分享关于...的想法。\n3. a common kind of 一种常见的..." },
+            { english: "To begin with, a fist often shows encouragement.", chinese: "首先，握拳通常表示鼓励。", grammarPoints: "1. To begin with 首先（常用于句首）。\n2. show encouragement 表达鼓励。" },
+            { english: "For example, when we see a classmate struggling with a difficult Math problem, we can make a fist in front of our chest and shake it gently.", chinese: "例如，当我们看到同学在做一道数学难题时，我们可以在胸前握拳并轻轻摇动。", grammarPoints: "1. see sb. doing sth. 看见某人正在做某事。\n2. struggle with 与...作斗争，在...方面很吃力。\n3. in front of 在...前面。" },
+            { english: "It is a silent way to cheer others up and make them feel supported.", chinese: "这是一种无声的方式来鼓励他人，让他们感到被支持。", grammarPoints: "1. a way to do sth. 做某事的方式。\n2. cheer sb. up 使某人振作起来（代词放中间）。\n3. make sb. feel + adj./v-ed 使某人感到..." },
+            { english: "However, we should also be careful with this gesture.", chinese: "然而，我们也应该小心使用这个手势。", grammarPoints: "1. be careful with 小心对待...\n2. gesture 手势，姿势。" },
+            { english: "A clenched fist can easily express anger, impatience or even danger.", chinese: "紧握的拳头很容易表达愤怒、不耐烦甚至危险。", grammarPoints: "1. clenched 握紧的（过去分词作定语）。\n2. express 表达（动词）。\n3. impatience 不耐烦（名词）。" },
+            { english: "If someone is extremely angry, they may use this gesture as a warning, which makes others feel scared and uncomfortable.", chinese: "如果有人非常生气，他们可能会把这个手势作为警告，这会让别人感到害怕和不舒服。", grammarPoints: "1. If引导条件状语从句。\n2. use... as... 把...用作...\n3. which引导非限制性定语从句，指代前面的整个动作。\n4. make sb. feel + adj. 使某人感到..." },
+            { english: "In conclusion, understanding the different meanings of a simple gesture like a fist can help us improve our communication.", chinese: "总之，了解像握拳这样简单手势的不同含义可以帮助我们改善沟通。", grammarPoints: "1. In conclusion 总之。\n2. understanding... 动名词短语作主语。\n3. help sb. (to) do sth. 帮助某人做某事。" },
+            { english: "Thank you for listening!", chinese: "感谢您的聆听！", grammarPoints: "1. Thank you for doing sth. 感谢做某事。" }
+        ]
     }
 ];
 
