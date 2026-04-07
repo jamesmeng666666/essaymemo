@@ -9,6 +9,9 @@ if (typeof window !== "undefined") {
 
 // Global state
 let currentAudio: HTMLAudioElement | null = null;
+if (typeof window !== "undefined") {
+    currentAudio = new Audio();
+}
 let queue: string[] = [];
 let onCompleteGlobal: (() => void) | null = null;
 let isInternalPlaying = false;
@@ -68,6 +71,7 @@ const getEnglishVoice = (): SpeechSynthesisVoice | null => {
 };
 
 const chunkText = (text: string): string[] => {
+  if (!text) return [];
   const rawSentences = text.match(/[^.!?\n]+[.!?\n]*/g) || [text];
   return rawSentences.map(s => s.trim()).filter(s => s.length > 0);
 };
@@ -123,13 +127,16 @@ export const playText = (text: string, onComplete?: () => void) => {
     isInternalPlaying = true;
 
     if (synth.getVoices().length === 0) {
+        let timeoutId: any;
         const tempHandler = () => {
             synth!.onvoiceschanged = null;
+            clearTimeout(timeoutId);
             if (isInternalPlaying) speakNext();
         };
         synth.onvoiceschanged = tempHandler;
         // Extended timeout to 500ms to allow more time for voices to load
-        setTimeout(() => {
+        timeoutId = setTimeout(() => {
+            synth!.onvoiceschanged = null;
             if (isInternalPlaying && synth!.speaking === false) speakNext();
         }, 500);
     } else {
@@ -145,18 +152,17 @@ export const playWav = (wavData: ArrayBuffer, onComplete?: () => void) => {
     const blob = new Blob([wavData], { type: 'audio/wav' });
     const url = URL.createObjectURL(blob);
     
-    const audio = new Audio(url);
-    currentAudio = audio;
+    if (!currentAudio) currentAudio = new Audio();
+    currentAudio.src = url;
     isInternalPlaying = true;
 
-    audio.onended = () => {
+    currentAudio.onended = () => {
         isInternalPlaying = false;
-        currentAudio = null;
         URL.revokeObjectURL(url); // Cleanup memory
         if (onComplete) onComplete();
     };
     
-    audio.onerror = (e) => {
+    currentAudio.onerror = (e) => {
         let message = "Unknown error";
         // Type guard: Check if e is an Event and has a target property (narrowing down from Event | string)
         if (typeof e === 'object' && e !== null && 'target' in e) {
@@ -168,12 +174,11 @@ export const playWav = (wavData: ArrayBuffer, onComplete?: () => void) => {
 
         console.error("Audio Playback Error", message);
         isInternalPlaying = false;
-        currentAudio = null;
         URL.revokeObjectURL(url);
         if (onComplete) onComplete();
     }
 
-    audio.play().catch(e => {
+    currentAudio.play().catch(e => {
         console.error("Play failed:", e);
         if (onComplete) onComplete();
     });
@@ -182,17 +187,16 @@ export const playWav = (wavData: ArrayBuffer, onComplete?: () => void) => {
 export const playAudioFromURL = (url: string, onComplete?: () => void, onError?: () => void) => {
     stopAudio();
 
-    const audio = new Audio(url);
-    currentAudio = audio;
+    if (!currentAudio) currentAudio = new Audio();
+    currentAudio.src = url;
     isInternalPlaying = true;
 
-    audio.onended = () => {
+    currentAudio.onended = () => {
         isInternalPlaying = false;
-        currentAudio = null;
         if (onComplete) onComplete();
     };
     
-    audio.onerror = (e) => {
+    currentAudio.onerror = (e) => {
         let message = "Unknown error";
         // Type guard: Check if e is an Event and has a target property (narrowing down from Event | string)
         if (typeof e === 'object' && e !== null && 'target' in e) {
@@ -204,11 +208,10 @@ export const playAudioFromURL = (url: string, onComplete?: () => void, onError?:
         
         console.error("File Playback Error", message);
         isInternalPlaying = false;
-        currentAudio = null;
         if (onError) onError();
     }
 
-    audio.play().catch(e => {
+    currentAudio.play().catch(e => {
         console.error("Play failed:", e);
         if (onError) onError();
     });
@@ -226,6 +229,5 @@ export const stopAudio = () => {
     if (currentAudio) {
         currentAudio.pause();
         currentAudio.currentTime = 0;
-        currentAudio = null;
     }
 };

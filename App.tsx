@@ -79,7 +79,7 @@ export default function App() {
     if (savedEssays) {
       let parsed = JSON.parse(savedEssays);
       
-      // Update logic: Sync `audioPath` and `grammarPoints` from INITIAL_ESSAYS to `savedEssays`
+      // Update logic: Sync `audioPath`, `grammarPoints`, and `rawContent` from INITIAL_ESSAYS to `savedEssays`
       // This ensures that if the code is updated with new paths or grammar points, existing users get them.
       parsed = parsed.map((saved: Essay) => {
           const fresh = INITIAL_ESSAYS.find(init => init.title === saved.title);
@@ -87,7 +87,8 @@ export default function App() {
               return {
                   ...saved,
                   audioPath: fresh.audioPath,
-                  sentences: fresh.sentences
+                  sentences: fresh.sentences,
+                  rawContent: saved.rawContent || fresh.rawContent
               };
           }
           return saved;
@@ -217,6 +218,14 @@ export default function App() {
         const pcmData = await generateSpeechForText(activeEssay.rawContent);
         // 2. Convert to WAV
         const wavData = pcmToWav(pcmData);
+        
+        // Save to DB for cache playback
+        try {
+            await saveAudioToDB(activeEssay.id, wavData);
+        } catch (e) {
+            console.warn("Failed to save audio to DB:", e);
+        }
+
         // 3. Create a download link
         const blob = new Blob([wavData], { type: 'audio/wav' });
         const url = URL.createObjectURL(blob);
@@ -286,7 +295,13 @@ export default function App() {
   const playFromCacheOrTTS = async (onFinish: () => void) => {
        if (!activeEssay) return;
        // Fallback 1: Cache
-       const cachedAudio = await getAudioFromDB(activeEssay.id);
+       let cachedAudio;
+       try {
+           cachedAudio = await getAudioFromDB(activeEssay.id);
+       } catch (e) {
+           console.warn("Failed to get audio from DB:", e);
+       }
+       
        if (cachedAudio) {
             playWav(cachedAudio, onFinish);
        } else {
