@@ -352,3 +352,15 @@ export const INITIAL_ESSAYS: Essay[] = RAW_ESSAYS.map(raw => ({
     createdAt: Date.now(),
     audioPath: raw.audioPath
 }));
+
+// --- Separate Audio Branch Configuration ---
+// When exporting to GitHub, AI Studio can sometimes overwrite branches or delete untracked audio files.
+// To solve this, you can create a separate branch in your GitHub repository named 'audio-assets',
+// and upload your .wav files there. This configuration will automatically fetch those files.
+export const GITHUB_REPOSITORY_INFO = {
+    username: "JamesMeng666666", // <-- 1. Change this to your GitHub username
+    repo: "EssayMemo",     // <-- 2. Change this to your GitHub repository name
+    audioBranch: "audio-assets",       // <-- 3. The separate branch for your audio files
+};
+
+export const REMOTE_AUDIO_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPOSITORY_INFO.username}/${GITHUB_REPOSITORY_INFO.repo}/${GITHUB_REPOSITORY_INFO.audioBranch}/public`;

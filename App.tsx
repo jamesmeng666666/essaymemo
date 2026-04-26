@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid'; 
-import { INITIAL_ESSAYS } from './constants';
+import { INITIAL_ESSAYS, REMOTE_AUDIO_BASE_URL } from './constants';
 import { Essay, PracticeMode, Token, UserAnswers, VerificationResult } from './types';
 import { analyzeTextForMemorization, analyzeTextForTranslation, generateSpeechForText } from './services/geminiService';
 import { playText, playWav, playAudioFromURL, pcmToWav, stopAudio } from './services/audioService';
@@ -69,6 +69,7 @@ export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDownloadingAudio, setIsDownloadingAudio] = useState(false);
   const [isLocalFileReady, setIsLocalFileReady] = useState(false);
+  const [isRemoteFileReady, setIsRemoteFileReady] = useState(false);
 
   // Initialization
   useEffect(() => {
@@ -130,12 +131,22 @@ export default function App() {
                   // Add cache buster to avoid cached 404s
                   const res = await fetch(`${essay.audioPath}?t=${Date.now()}`, { method: 'HEAD' });
                   const contentType = res.headers.get('content-type');
-                  setIsLocalFileReady(res.ok && contentType !== null && !contentType.includes('text/html'));
+                  const isLocalReady = res.ok && contentType !== null && !contentType.includes('text/html');
+                  setIsLocalFileReady(isLocalReady);
+                  setIsRemoteFileReady(false);
+                  
+                  if (!isLocalReady) {
+                      // Try resolving from GitHub branch if local is missing
+                      const remoteRes = await fetch(`${REMOTE_AUDIO_BASE_URL}${essay.audioPath}?t=${Date.now()}`, { method: 'HEAD' });
+                      setIsRemoteFileReady(remoteRes.ok);
+                  }
               } catch (e) {
                   setIsLocalFileReady(false);
+                  setIsRemoteFileReady(false);
               }
           } else {
               setIsLocalFileReady(false);
+              setIsRemoteFileReady(false);
           }
           // Stop audio if switching essays
           stopAudio();
@@ -285,8 +296,18 @@ export default function App() {
                  console.warn("Local file failed, trying cache");
                  playFromCacheOrTTS(onFinish);
              });
-        } else {
-             // Priority 2/3: Cache or TTS
+        } 
+        // Priority 2: Remote Branch File
+        else if (isRemoteFileReady && activeEssay.audioPath) {
+             const remoteUrl = `${REMOTE_AUDIO_BASE_URL}${activeEssay.audioPath}`;
+             console.log("Playing from remote branch:", remoteUrl);
+             playAudioFromURL(remoteUrl, onFinish, () => {
+                 console.warn("Remote file failed, trying cache");
+                 playFromCacheOrTTS(onFinish);
+             });
+        }
+        else {
+             // Priority 3/4: Cache or TTS
              playFromCacheOrTTS(onFinish);
         }
     }
@@ -745,9 +766,9 @@ export default function App() {
                             className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
                                 isPlaying 
                                     ? 'bg-blue-600 text-white' 
-                                    : (isLocalFileReady ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700')
+                                    : ((isLocalFileReady || isRemoteFileReady) ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700')
                             }`}
-                            title={isLocalFileReady ? "Play (Local High-Quality File)" : "Play (Missing Local File - Using Web Fallback)"}
+                            title={isLocalFileReady ? "Play (Local High-Quality File)" : isRemoteFileReady ? "Play (Remote Branch High-Quality File)" : "Play (Missing Audio File - Using Web Fallback)"}
                         >
                             {isPlaying ? <PauseIcon /> : <PlayIcon />}
                         </button>
@@ -756,8 +777,10 @@ export default function App() {
                         <div className="text-xs font-medium px-2 hidden sm:block whitespace-nowrap">
                             {isLocalFileReady ? (
                                 <span className="text-green-600">Local Audio Ready</span>
+                            ) : isRemoteFileReady ? (
+                                <span className="text-green-600">Remote Audio Ready</span>
                             ) : (
-                                <span className="text-orange-500">Missing Local Audio</span>
+                                <span className="text-orange-500">Missing Audio File</span>
                             )}
                         </div>
                     </div>
