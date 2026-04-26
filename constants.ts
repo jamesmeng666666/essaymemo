@@ -302,7 +302,7 @@ Li Hua`,
     },
     {
         title: "8BU3: My favourite Chinese animation",
-        audioPath: "audio/my_favourite_chinese_animation.wav",
+        audioPath: "/audio/my_favourite_chinese_animation.wav",
         content: `Among many wonderful Chinese animations, Ne Zha: Birth of the Demon Child stands out as my favourite. It tells the exciting story of a brave boy called Ne Zha. Though he is misunderstood and disliked at first, he finally sacrifice himself to protect others. 
 
 I love this animation for three reasons. First, it is made with amazing pictures and exciting action scenes. Besides, traditional Chinese culture is fully reflected in it. Most importantly, it teaches us that we can choose to be kind and brave, and should not be easily influenced by others’ opinions. 
@@ -321,7 +321,7 @@ To sum up, this inspiring animation not only brings me joy but also makes me pro
     },
     {
         title: "8BU4: Protecting Traditional Handicrafts",
-        audioPath: "audio/protecting_traditional_handicrafts.wav",
+        audioPath: "/audio/protecting_traditional_handicrafts.wav",
         content: `Dear classmates,
 As we all know, Shenzhen is a wonderful modern city with rich culture and strong technological atmosphere. However, some traditional handicrafts are slowly disappearing. It is our duty to take action to protect and develop them.
 

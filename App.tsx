@@ -46,6 +46,12 @@ const normalizeText = (text: string) => {
     return text.trim().toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g,"");
 };
 
+const joinPaths = (base: string, path: string) => {
+    const b = base.endsWith('/') ? base.slice(0, -1) : base;
+    const p = path.startsWith('/') ? path : '/' + path;
+    return b + p;
+};
+
 // --- Components ---
 
 export default function App() {
@@ -137,7 +143,7 @@ export default function App() {
                   
                   if (!isLocalReady) {
                       // Try resolving from GitHub branch if local is missing
-                      const remoteRes = await fetch(`${REMOTE_AUDIO_BASE_URL}${essay.audioPath}?t=${Date.now()}`, { method: 'HEAD' });
+                      const remoteRes = await fetch(`${joinPaths(REMOTE_AUDIO_BASE_URL, essay.audioPath)}?t=${Date.now()}`, { method: 'HEAD' });
                       setIsRemoteFileReady(remoteRes.ok);
                   }
               } catch (e) {
@@ -299,7 +305,7 @@ export default function App() {
         } 
         // Priority 2: Remote Branch File
         else if (isRemoteFileReady && activeEssay.audioPath) {
-             const remoteUrl = `${REMOTE_AUDIO_BASE_URL}${activeEssay.audioPath}`;
+             const remoteUrl = joinPaths(REMOTE_AUDIO_BASE_URL, activeEssay.audioPath);
              console.log("Playing from remote branch:", remoteUrl);
              playAudioFromURL(remoteUrl, onFinish, () => {
                  console.warn("Remote file failed, trying cache");
