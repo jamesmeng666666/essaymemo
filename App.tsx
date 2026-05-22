@@ -109,6 +109,18 @@ export default function App() {
       // Remove the old duplicate essay without the prefix
       parsed = parsed.filter((e: Essay) => e.title !== "Body Language: Making a Fist");
 
+      // Sort parsed essays to match INITIAL_ESSAYS order
+      parsed.sort((a: Essay, b: Essay) => {
+          const indexA = INITIAL_ESSAYS.findIndex(init => init.title === a.title);
+          const indexB = INITIAL_ESSAYS.findIndex(init => init.title === b.title);
+          
+          if (indexA === -1 && indexB === -1) return 0;
+          if (indexA === -1) return -1; // custom essays first
+          if (indexB === -1) return 1;
+          
+          return indexA - indexB;
+      });
+
       setEssays(parsed);
       if (parsed.length > 0) setActiveEssayId(parsed[0].id);
     } else {
